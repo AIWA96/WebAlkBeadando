@@ -124,7 +124,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/service/pom.xml" />
         <option value="$PROJECT_DIR$/dao/pom.xml" />
@@ -155,6 +154,7 @@
         <option value="$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/exceptions/StorageNotAvaibleException.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/exceptions/StorageNotAvailableException.java" />
         <option value="$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/service/Employee.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -193,7 +193,8 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -201,77 +202,11 @@
               <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
               <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="exceptions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="WebAlkBeadando" type="b2602c69:ProjectViewProjectNode" />
-              <item name="WebAlkBeadando" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -405,6 +340,7 @@
       <workItem from="1510826970474" duration="1230000" />
       <workItem from="1510842415569" duration="5209000" />
       <workItem from="1510847642861" duration="112000" />
+      <workItem from="1510849108710" duration="51000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1510557980037</created>
@@ -417,7 +353,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12370000" />
+    <option name="totallyTimeSpent" value="12421000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -436,7 +372,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32239583" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32239583" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -507,6 +443,71 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/service/ShopService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;method#createShop#0;class#ShopService#0" expanded="false" />
+            <element signature="docComment;method#getShop#0;class#ShopService#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/service/Employee.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;method#createEmployee#0;class#Employee#0" expanded="false" />
+            <element signature="docComment;method#getEmployee#0;class#Employee#0" expanded="false" />
+            <element signature="docComment;method#getEmployee#1;class#Employee#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/model/Shop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="27" column="4" lean-forward="false" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
+          <folding>
+            <element signature="docComment;method#Shop#0;class#Shop#0" expanded="false" />
+            <element signature="method#getNumberOfEmployees#0;class#Shop#0" expanded="false" />
+            <element signature="method#setName#0;class#Shop#0" expanded="false" />
+            <element signature="method#setLocation#0;class#Shop#0" expanded="false" />
+            <element signature="method#setEmployees#0;class#Shop#0" expanded="false" />
+            <element signature="method#equals#0;class#Shop#0" expanded="false" />
+            <element signature="method#hashCode#0;class#Shop#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/model/Employee.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="8" column="18" lean-forward="false" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding>
+            <element signature="docComment;method#Employee#0;class#Employee#0" expanded="false" />
+            <element signature="method#Employee#0;class#Employee#0" expanded="false" />
+            <element signature="method#setName#0;class#Employee#0" expanded="false" />
+            <element signature="method#setSex#0;class#Employee#0" expanded="false" />
+            <element signature="method#setSalary#0;class#Employee#0" expanded="false" />
+            <element signature="method#setPost#0;class#Employee#0" expanded="false" />
+            <element signature="method#equals#0;class#Employee#0" expanded="false" />
+            <element signature="method#hashCode#0;class#Employee#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/main/java/hu/iit/uni/miskolc/webalk/core/service/ShopService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
