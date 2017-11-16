@@ -1,5 +1,4 @@
-package hu.iit.uni.miskolc.wabalk;
-
+package hu.iit.uni.miskolc.wabalk.service;
 /**
  * Hello world!
  *

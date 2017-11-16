@@ -1,4 +1,4 @@
-package hu.iit.uni.miskolc.wabalk;
+package hu.iit.uni.miskolc.wabalk.controller;
 
 /**
  * Hello world!

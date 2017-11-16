@@ -1,4 +1,4 @@
-package hu.iit.uni.miskolc.wabalk;
+package hu.iit.uni.miskolc.wabalk.service;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -1,4 +1,4 @@
-package hu.iit.uni.miskolc.wabalk;
+package hu.iit.uni.miskolc.wabalk.dao;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
