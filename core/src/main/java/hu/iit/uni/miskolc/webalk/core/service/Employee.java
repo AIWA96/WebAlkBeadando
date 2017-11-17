@@ -7,7 +7,7 @@ import hu.iit.uni.miskolc.webalk.core.model.Sex;
 public interface Employee {
 
     /**
-     * @param IdNum
+     * @param idNum
      * @param name
      * @param sex
      * @param salary
