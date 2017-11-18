@@ -3,8 +3,10 @@ package hu.iit.uni.miskolc.webalk.core.service;
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Post;
 import hu.iit.uni.miskolc.webalk.core.model.Sex;
+import hu.iit.uni.miskolc.webalk.core.model.Employee;
 
-public interface Employee {
+public interface EmployeeService {
+
 
     /**
      * @param idNum
