@@ -1,5 +1,5 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
-public enum Sex {
+public enum Gender {
     FEMALE, MALE, OTHER;
 }

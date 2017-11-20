@@ -3,30 +3,30 @@ package hu.iit.uni.miskolc.webalk.core.model;
 import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidSalaryException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoPostException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoSexException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
 
 public class Employee {
     private int idNum;
     private String name;
-    private Sex sex;
+    private Gender gender;
     private float salary;
     private Post post;
 
     /**
      * @param idNum
      * @param name
-     * @param sex
+     * @param gender
      * @param salary
      * @param post
      * @throws NoNameException
      * @throws NoPostException
      * @throws InvalidSalaryException
-     * @throws NoSexException
+     * @throws NoGenderException
      */
-    public Employee(int idNum, String name, Sex sex, float salary, Post post) throws NoNameException, NoPostException, InvalidSalaryException, NoSexException {
+    public Employee(int idNum, String name, Gender gender, float salary, Post post) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
         this.idNum = idNum;
         setName(name);
-        setSex(sex);
+        setGender(gender);
         setSalary(salary);
         setPost(post);
     }
@@ -50,15 +50,15 @@ public class Employee {
         this.name = name;
     }
 
-    public Sex getSex() {
-        return sex;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setSex(Sex sex) throws NoSexException {
-        if (sex == null){
-            throw new NoSexException("The sex mast have set for a person!");
+    public void setGender(Gender gender) throws NoGenderException {
+        if (gender == null){
+            throw new NoGenderException("The gender must have set for a person!");
         }
-        this.sex = sex;
+        this.gender = gender;
     }
 
     public float getSalary() {
@@ -93,7 +93,7 @@ public class Employee {
         if (idNum != employee.idNum) return false;
         if (Float.compare(employee.salary, salary) != 0) return false;
         if (!name.equals(employee.name)) return false;
-        if (sex != employee.sex) return false;
+        if (gender != employee.gender) return false;
         return post == employee.post;
     }
 
@@ -101,7 +101,7 @@ public class Employee {
     public int hashCode() {
         int result = idNum;
         result = 31 * result + name.hashCode();
-        result = 31 * result + sex.hashCode();
+        result = 31 * result + gender.hashCode();
         result = 31 * result + (salary != +0.0f ? Float.floatToIntBits(salary) : 0);
         result = 31 * result + post.hashCode();
         return result;
