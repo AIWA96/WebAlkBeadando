@@ -11,6 +11,7 @@ public class Employee {
     private Gender gender;
     private float salary;
     private Post post;
+    private String shopName;
 
     /**
      * @param idNum
@@ -18,13 +19,19 @@ public class Employee {
      * @param gender
      * @param salary
      * @param post
+     * @param shopName
      * @throws NoNameException
      * @throws NoPostException
      * @throws InvalidSalaryException
      * @throws NoGenderException
      */
-    public Employee(int idNum, String name, Gender gender, float salary, Post post) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
+    public Employee(int idNum, String name, Gender gender, float salary, Post post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
         this.idNum = idNum;
+        setShopName(shopName);
+        /*
+        *TODO:
+        * check if other classes needs a change, because of the shopName variable
+        */
         setName(name);
         setGender(gender);
         setSalary(salary);
@@ -81,6 +88,18 @@ public class Employee {
             throw new NoPostException("An employee must have a post!");
         }
         this.post = post;
+    }
+
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) throws NoNameException {
+        if (shopName == null || shopName == ""){
+            throw new NoNameException("Shop name where the employee is working must be set!");
+        }
+        this.shopName = shopName;
     }
 
     @Override
