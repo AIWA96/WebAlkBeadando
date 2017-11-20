@@ -7,14 +7,14 @@ import java.util.Collection;
 
 public interface AccessoriesService {
 
-    Accessories createAccessories(String appellation, String name, float price) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
+    Accessories createAccessories(String appellation, String brand, float price) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
 
     Collection<Accessories> getAccessories(String appellation);
-    Accessories getAccessories(String appellation, String name);
+    Accessories getAccessories(String appellation, String brand);
 
     boolean updateAccessoires(String appellation);
-    boolean updateAccessoires(String appellation, String name);
+    boolean updateAccessoires(String appellation, String brand);
 
     boolean deleteAccessoires(String appellation);
-    boolean deleteAccessoires(String appellation, String name);
+    boolean deleteAccessoires(String appellation, String brand);
 }

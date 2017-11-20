@@ -6,12 +6,12 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 
 public class Accessories {
     private String appellation;
-    private String name;
+    private String brand;
     private float price;
 
-    public Accessories(String appellation, String name, float price) throws NoAppelationException, NoNameException, InvalidPriceException {
+    public Accessories(String appellation, String brand, float price) throws NoAppelationException, NoNameException, InvalidPriceException {
         setAppellation(appellation);
-        setName(name);
+        setBrand(brand);
         setPrice(price);
     }
 
@@ -26,15 +26,15 @@ public class Accessories {
         this.appellation = appellation;
     }
 
-    public String getName() {
-        return name;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setName(String name) throws NoNameException {
-        if (name == null || name == ""){
-            throw new NoNameException("Accessori must have a name!");
+    public void setBrand(String brand) throws NoNameException {
+        if (brand == null || brand == ""){
+            throw new NoNameException("Accessori must have a brand!");
         }
-        this.name = name;
+        this.brand = brand;
     }
 
     public float getPrice() {
@@ -57,13 +57,13 @@ public class Accessories {
 
         if (Float.compare(that.price, price) != 0) return false;
         if (!appellation.equals(that.appellation)) return false;
-        return name.equals(that.name);
+        return brand.equals(that.brand);
     }
 
     @Override
     public int hashCode() {
         int result = appellation.hashCode();
-        result = 31 * result + name.hashCode();
+        result = 31 * result + brand.hashCode();
         result = 31 * result + (price != +0.0f ? Float.floatToIntBits(price) : 0);
         return result;
     }
