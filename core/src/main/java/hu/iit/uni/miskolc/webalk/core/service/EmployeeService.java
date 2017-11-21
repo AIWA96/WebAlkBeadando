@@ -1,8 +1,6 @@
 package hu.iit.uni.miskolc.webalk.core.service;
 
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
-import hu.iit.uni.miskolc.webalk.core.model.Gender;
-import hu.iit.uni.miskolc.webalk.core.model.Post;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 
 public interface EmployeeService {
@@ -21,7 +19,7 @@ public interface EmployeeService {
      * @throws NotFoundException
      * @throws NoNameException
      */
-    Employee createEmployee(int idNum, String name, Gender gender, float salary, Post post) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
+    Employee createEmployee(int idNum, String name, String gender, float salary, String post) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
 
     /**
      * @param idNum

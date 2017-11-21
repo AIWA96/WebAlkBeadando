@@ -1,16 +1,13 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidSalaryException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoPostException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 
 public class Employee {
     private int idNum;
     private String name;
-    private Gender gender;
+    private String gender;
     private float salary;
-    private Post post;
+    private String  post;
     private String shopName;
 
     /**
@@ -25,7 +22,7 @@ public class Employee {
      * @throws InvalidSalaryException
      * @throws NoGenderException
      */
-    public Employee(int idNum, String name, Gender gender, float salary, Post post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
+    public Employee(int idNum, String name, String gender, float salary, String  post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
         this.idNum = idNum;
         setShopName(shopName);
         /*
@@ -57,11 +54,11 @@ public class Employee {
         this.name = name;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) throws NoGenderException {
+    public void setGender(String gender) throws NoGenderException {
         if (gender == null){
             throw new NoGenderException("The gender must have set for a person!");
         }
@@ -79,17 +76,16 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Post getPost() {
+    public String getPost() {
         return post;
     }
 
-    public void setPost(Post post) throws NoPostException {
+    public void setPost(String post) throws NoPostException {
         if (post == null){
             throw new NoPostException("An employee must have a post!");
         }
         this.post = post;
     }
-
 
     public String getShopName() {
         return shopName;

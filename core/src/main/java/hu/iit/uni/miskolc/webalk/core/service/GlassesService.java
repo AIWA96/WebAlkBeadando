@@ -1,14 +1,13 @@
 package hu.iit.uni.miskolc.webalk.core.service;
 
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
-import hu.iit.uni.miskolc.webalk.core.model.Type;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
 
 import java.util.Collection;
 
 public interface GlassesService {
 
-    Glasses createGlass(String brand, String model, float price, String availableAt, Type type, boolean sunglasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
+    Glasses createGlass(String brand, String model, float price, String availableAt, String gender, boolean sunglasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
 
     Collection<String> getGlasses(String brand);
 
