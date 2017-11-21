@@ -1,9 +1,6 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidSalaryException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoPostException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 
 public class Employee {
     private int idNum;
@@ -25,7 +22,7 @@ public class Employee {
      * @throws InvalidSalaryException
      * @throws NoGenderException
      */
-    public Employee(int idNum, String name, Gender gender, float salary, Post post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
+    public Employee(int idNum, String name, Gender gender, float salary, Post post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException, InvalidGenderTypeException {
         this.idNum = idNum;
         setShopName(shopName);
         /*
@@ -61,9 +58,11 @@ public class Employee {
         return gender;
     }
 
-    public void setGender(Gender gender) throws NoGenderException {
+    public void setGender(Gender gender) throws NoGenderException, InvalidGenderTypeException {
         if (gender == null){
             throw new NoGenderException("The gender must have set for a person!");
+        }else if ( gender == Gender.UNISEX){
+            throw new InvalidGenderTypeException("A person cannot have a \"unisex\" gender!");
         }
         this.gender = gender;
     }

@@ -1,16 +1,13 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoLocationSetException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoTypeException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 
 public class Glasses {
     private String brand;
     private String model;
     private float price;
     private String availableAt;
-    private Type type;
+    private Gender gender;
     private boolean sunglasses;
 
     /**
@@ -18,18 +15,18 @@ public class Glasses {
      * @param model
      * @param price
      * @param availableAt
-     * @param type
+     * @param gender
      * @throws NoLocationSetException
      * @throws InvalidPriceException
      * @throws NoNameException
-     * @throws NoTypeException
+     * @throws NoGenderException
      */
-    public Glasses(String brand, String model, float price, String availableAt, Type type, boolean sunglasses) throws NoLocationSetException, InvalidPriceException, NoNameException, NoTypeException {
+    public Glasses(String brand, String model, float price, String availableAt, Gender gender, boolean sunglasses) throws NoLocationSetException, InvalidPriceException, NoNameException, NoGenderException, InvalidGenderTypeException {
         setBrand(brand);
         setModel(model);
         setPrice(price);
         setAvailableAt(availableAt);
-        setType(type);
+        setGender(gender);
         this.sunglasses = sunglasses;
     }
 
@@ -77,15 +74,17 @@ public class Glasses {
         this.availableAt = availableAt;
     }
 
-    public Type getType() {
-        return type;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setType(Type type) throws NoTypeException {
-        if (type == null){
-            throw new NoTypeException("A type must be set!");
+    public void setGender(Gender gender) throws NoGenderException, InvalidGenderTypeException {
+        if (gender == null){
+            throw new NoGenderException("A gender must be set!");
+        }else if (gender == Gender.OTHER){
+            throw new InvalidGenderTypeException("A glass cannot an \"other\" gender type!");
         }
-        this.type = type;
+        this.gender = gender;
     }
 
     public boolean isSunglasses() {
