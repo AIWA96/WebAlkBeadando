@@ -58,9 +58,11 @@ public class Employee {
         return gender;
     }
 
-    public void setGender(String gender) throws NoGenderException {
+    public void setGender(Gender gender) throws NoGenderException {
         if (gender == null){
             throw new NoGenderException("The gender must have set for a person!");
+        }else if ( gender == Gender.UNISEX){
+            throw new InvalidGenderTypeException("A person cannot have a \"unisex\" gender!");
         }
         this.gender = gender;
     }
