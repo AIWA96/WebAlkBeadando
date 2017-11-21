@@ -10,9 +10,8 @@ public interface GlassesDAO {
     Collection<Glasses> getGlasses(String brand);
     Glasses getGlasses(String brand, String model);
 
-    boolean updateGlasses(String brand, String model);
-    boolean updateGlasses(String brand);
+    boolean updateGlasses(Glasses glasses);
 
-    boolean deleteGlasses(String brand, String model);
-    boolean deleteGlasses(String model);
+    boolean deleteGlasses(String brand);
+    boolean deleteGlasses(Glasses glasses);
 }

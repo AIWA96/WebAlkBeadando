@@ -7,7 +7,6 @@ public interface EmployeeDAO {
 
     Employee getEmployee(int id);
 
-    boolean updateEmployee(int id);
     boolean updateEmployee(Employee employee);
 
     boolean deleteEmployee(int id);

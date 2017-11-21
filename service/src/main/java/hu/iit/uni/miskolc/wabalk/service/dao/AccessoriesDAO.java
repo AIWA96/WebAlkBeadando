@@ -10,9 +10,8 @@ public interface AccessoriesDAO {
     Collection<Accessories> getAccessoriesByAppellation(String appellation);
     Collection<Accessories> getAccessoriesByBrand(String brand);
 
-    boolean updateAccessories(String appellation, String brand);
-    boolean updateAccessoriesByBrand(String brand);
+    boolean updateAccessories(Accessories accessories);
 
-    boolean deleteAccessories(String appellation);
+    boolean deleteAccessories(Accessories accessories);
     boolean deleteAccessoriesByBrand(String brand);
 }
