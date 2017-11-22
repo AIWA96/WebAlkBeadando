@@ -7,7 +7,7 @@ public class Employee {
     private String name;
     private String gender;
     private float salary;
-    private String  post;
+    private String post;
     private String shopName;
 
     /**

@@ -5,10 +5,10 @@ import hu.iit.uni.miskolc.webalk.core.model.Shop;
 import java.util.Collection;
 
 public interface ShopDAO {
-    void createShop(Shop shop);
+    void createShop(Shop shop) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
 
-    Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException;
-    Collection<Shop> getShopByLocation(String location);
+    Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException, AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
+    Collection<Shop> getShopByLocation(String location) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
 
     boolean updateShop(Shop shop) throws NotFoundException, StorageNotAvailableException, AlreadyExistingException, StorageException, ClassNotFoundException;
 

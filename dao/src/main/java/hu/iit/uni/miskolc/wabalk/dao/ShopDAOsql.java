@@ -13,40 +13,41 @@ import java.util.List;
 public class ShopDAOsql implements ShopDAO {
 
     private static String OS = null;
-    private String con = getConnectionString();
+    private String con;
     private Connection c;
     private Statement stmt;
 
-
-    public static String getConnectionString(){
-        OS = System.getProperty("os.name");
-        if (OS.startsWith("Windows")){
-            return "jdbc:sqlite:C:/Users/Dani/IdeaProjects/WebAlkBeadando/dao/src/resources/glassShop.db";
-        }
-        return "jdbc:sqlite:/home/dani/IdeaProjects/WebAlkBeadando/dao/src/resources/glassShop.db";
+    public ShopDAOsql() {
+        con = ConnectionString.getConnectionString();
     }
 
     @Override
-    public void createShop(Shop shop) {
+    public void createShop(Shop shop) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
             stmt = c.createStatement();
-            String sql = "INSERT INTO Shop (Name, Location) VALUES (" + shop.getName() + ", " + shop.getLocation() + ");";
+            String sql = "INSERT INTO Shop (Name, Location) VALUES ("
+                    + shop.getName() + ", " + shop.getLocation() + ");";
             stmt.executeUpdate(sql);
             stmt.close();
             c.commit();
             c.close();
+        }catch (SQLIntegrityConstraintViolationException e){
+            throw new AlreadyExistingException();
+        }catch (SQLDataException e){
+            throw new WrongDataTypeException();
+        }catch (SQLException e){
+            throw new StorageException();
         }catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+            throw new PersistanceException();
         }
     }
 
     @Override
-    public Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException {
+    public Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException, AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         Collection<Employee> employees = new ArrayList<>();
         String shopName = null;
         String shopLocation = null;
@@ -75,15 +76,20 @@ public class ShopDAOsql implements ShopDAO {
             rs.close();
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+        }catch (SQLIntegrityConstraintViolationException e){
+            throw new AlreadyExistingException();
+        }catch (SQLDataException e){
+            throw new WrongDataTypeException();
+        }catch (SQLException e){
+            throw new StorageException();
+        }catch ( Exception e ) {
+            throw new PersistanceException();
         }
         return new Shop(shopName, shopLocation, employees);
     }
 
     @Override
-    public Collection<Shop> getShopByLocation(String location) {
+    public Collection<Shop> getShopByLocation(String location) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         Collection<Employee> employees = new ArrayList<>();
         List<String> shopNames = new ArrayList<>();
         ArrayList<Shop> shops = new ArrayList<>();
@@ -117,9 +123,14 @@ public class ShopDAOsql implements ShopDAO {
             rs.close();
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
+        }catch (SQLIntegrityConstraintViolationException e){
+            throw new AlreadyExistingException();
+        }catch (SQLDataException e){
+            throw new WrongDataTypeException();
+        }catch (SQLException e){
+            throw new StorageException();
+        }catch ( Exception e ) {
+            throw new PersistanceException();
         }
         return shops;
     }
