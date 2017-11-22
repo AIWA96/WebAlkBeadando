@@ -10,7 +10,6 @@ import java.util.Collection;
 
 public class EmloyeeDAOsql implements EmployeeDAO {
 
-    private static String OS = null;
     private String con;
     private Connection c;
     private Statement stmt;

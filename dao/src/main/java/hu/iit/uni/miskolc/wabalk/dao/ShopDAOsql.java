@@ -12,7 +12,6 @@ import java.util.List;
 
 public class ShopDAOsql implements ShopDAO {
 
-    private static String OS = null;
     private String con;
     private Connection c;
     private Statement stmt;
