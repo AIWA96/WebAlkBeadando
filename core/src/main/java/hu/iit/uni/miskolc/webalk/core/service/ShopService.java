@@ -19,17 +19,17 @@ public interface ShopService {
      * @throws NotFoundException
      * @throws NoNameException
      */
-    Shop createShop(String name, String location, Collection<Employee> employees) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
+    void createShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
 
     /**
      * @param name
      * @return Shop
      */
-    Shop getShop(String name);
+    Shop getShopByName(String name) throws WrongDataTypeException, NoEmployeeException, NoLocationException, StorageException, NoNameException, PersistanceException, AlreadyExistingException;
+    Collection<Shop> getShopByLocation(String location) throws WrongDataTypeException, NoEmployeeException, NoLocationException, StorageException, NoNameException, PersistanceException, AlreadyExistingException;
 
-    boolean updateShop(String name);
-    boolean updateShop(Shop shop);
+    boolean updateShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
 
-    boolean deleteShop(String name);
-    boolean deleteShop(Shop shop);
+    boolean deleteShop(String name) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
+    boolean deleteShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
 }

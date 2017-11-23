@@ -7,16 +7,13 @@ import java.util.Collection;
 
 public interface GlassesService {
 
+    void createGlass(Glasses glasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
 
-    Glasses createGlass(String brand, String model, float price, String availableAt, String gender, boolean sunglasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
+    Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
+    Glasses getGlasses(String brand, String model) throws NoLocationSetException, InvalidPriceException, AlreadyExistingException, StorageException, NoNameException, PersistanceException, WrongDataTypeException, NoGenderException;
 
-    Collection<String> getGlasses(String brand);
+    boolean updateGlassess(Glasses glasses) throws PersistanceException, StorageException, AlreadyExistingException;
 
-    Glasses getGlasses(String brand, String model);
-
-    boolean updateGlassess(String brand);
-    boolean updateGlasses(String brand, String model);
-
-    boolean deleteGlassess(String brand);
-    boolean deleteGlasses(String brand, String model);
+    boolean deleteGlassess(Glasses glasses) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteGlasses(String brand, String model) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
 }

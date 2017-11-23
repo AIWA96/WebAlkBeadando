@@ -19,23 +19,16 @@ public interface EmployeeService {
      * @throws NotFoundException
      * @throws NoNameException
      */
-    Employee createEmployee(int idNum, String name, String gender, float salary, String post) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException;
+    void createEmployee(Employee employee) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
 
     /**
      * @param idNum
      * @return an Employee
      */
-    Employee getEmployee(int idNum);
+    Employee getEmployee(int idNum) throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistanceException, AlreadyExistingException, InvalidSalaryException;
 
-    /**
-     * @param name
-     * @return an Employee
-     */
-    Employee getEmployee(String name);
+    boolean updateEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
 
-    boolean updateEmployee(int idNum);
-    boolean updateEmployee(Employee employee);
-
-    boolean deleteEmployee(int idNum);
-    boolean deleteEmployee(Employee employee);
+    boolean deleteEmployee(int idNum) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
 }

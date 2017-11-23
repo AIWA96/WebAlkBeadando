@@ -5,8 +5,6 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class EmloyeeDAOsql implements EmployeeDAO {
 
