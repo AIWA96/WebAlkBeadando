@@ -5,6 +5,8 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
 
+import java.util.Collection;
+
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeDAO employeeDAO;
@@ -19,6 +21,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public Employee getEmployee(int idNum) throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistanceException, AlreadyExistingException, InvalidSalaryException {
         return employeeDAO.getEmployee(idNum);
+    }
+
+    public Collection<Employee> getAllEmployee() throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistanceException, AlreadyExistingException, InvalidSalaryException {
+        return employeeDAO.getAllEmployee();
     }
 
     public boolean updateEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {

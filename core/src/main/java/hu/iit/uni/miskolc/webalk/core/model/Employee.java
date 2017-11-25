@@ -25,10 +25,6 @@ public class Employee {
     public Employee(int idNum, String name, String gender, float salary, String  post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
         this.idNum = idNum;
         setShopName(shopName);
-        /*
-        *TODO:
-        * check if other classes needs a change, because of the shopName variable
-        */
         setName(name);
         setGender(gender);
         setSalary(salary);
@@ -107,9 +103,7 @@ public class Employee {
 
         if (idNum != employee.idNum) return false;
         if (Float.compare(employee.salary, salary) != 0) return false;
-        if (!name.equals(employee.name)) return false;
-        if (gender != employee.gender) return false;
-        return post == employee.post;
+        return name.equals(employee.name);
     }
 
     @Override
@@ -120,5 +114,17 @@ public class Employee {
         result = 31 * result + (salary != +0.0f ? Float.floatToIntBits(salary) : 0);
         result = 31 * result + post.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "idNum=" + idNum +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", salary=" + salary +
+                ", post='" + post + '\'' +
+                ", shopName='" + shopName + '\'' +
+                "}\n";
     }
 }

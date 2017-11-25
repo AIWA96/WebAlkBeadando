@@ -5,6 +5,8 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class EmloyeeDAOsql implements EmployeeDAO {
 
@@ -18,26 +20,33 @@ public class EmloyeeDAOsql implements EmployeeDAO {
 
     @Override
     public void createEmployee(Employee employee) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
+        String sql = "INSERT INTO Employee (IDNUM, NAME, GENDER, SALARY, POST, ShopName) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, employee.getIdNum());
+            ps.setString(2, employee.getName());
+            ps.setString(3, employee.getGender());
+            ps.setFloat(4, employee.getSalary());
+            ps.setString(5, employee.getPost());
+            ps.setString(6, employee.getShopName());
+            ps.executeUpdate();
 
-            stmt = c.createStatement();
-            String sql = "INSERT INTO Employee (IDNUM, NAME, GENDER, SALARY, POST, ShopNameLocation) " +
-                    "VALUES (" + employee.getIdNum() + ", " + employee.getName() + ", " + employee.getGender()
-                    + ", " + employee.getSalary() + ", " + employee.getPost() + ", " + employee.getShopName() + ");";
-            stmt.executeUpdate(sql);
-            stmt.close();
             c.commit();
             c.close();
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch (SQLDataException e){
+        } catch (SQLDataException e) {
             throw new WrongDataTypeException();
-        }catch (SQLException e){
-            throw new StorageException();
-        }catch ( Exception e ) {
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 19) {
+                throw new AlreadyExistingException();
+            } else {
+                throw new StorageException();
+            }
+        } catch (Exception e) {
             throw new PersistanceException();
         }
     }
@@ -56,8 +65,8 @@ public class EmloyeeDAOsql implements EmployeeDAO {
             c.setAutoCommit(false);
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Employee WHERE IDNUM = " + id +";");
-            if (rs.next() == true) {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Employee WHERE IDNUM = " + id + ";");
+            if (rs.next()) {
                 ename = rs.getString("NAME");
                 gender = rs.getString("GENDER");
                 salary = rs.getFloat("SALARY");
@@ -67,40 +76,76 @@ public class EmloyeeDAOsql implements EmployeeDAO {
             rs.close();
             stmt.close();
             c.close();
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch (SQLDataException e){
+        } catch (SQLDataException e) {
             throw new WrongDataTypeException();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new StorageException();
-        }catch ( Exception e ) {
+        } catch (Exception e) {
             throw new PersistanceException();
         }
         return new Employee(id, ename, gender, salary, post, shopName);
     }
 
     @Override
+    public Collection<Employee> getAllEmployee() throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistanceException, AlreadyExistingException, InvalidSalaryException {
+        int id;
+        String name;
+        String gender;
+        String post;
+        float salary;
+        String shopName;
+        Collection<Employee> employees = new ArrayList<>();
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection(con);
+
+            String sql = "SELECT * FROM Employee";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("IDNUM");
+                name = rs.getString("Name");
+                gender = rs.getString("Gender");
+                post = rs.getString("Post");
+                salary = rs.getFloat("Salary");
+                shopName = rs.getString("ShopName");
+                employees.add(new Employee(id, name, gender, salary, post, shopName));
+            }
+            rs.close();
+            c.close();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new AlreadyExistingException();
+        } catch (SQLDataException e) {
+            throw new WrongDataTypeException();
+        } catch (SQLException e) {
+            throw new StorageException();
+        } catch (Exception e) {
+            throw new PersistanceException();
+        }
+        return employees;
+    }
+
+    @Override
     public boolean updateEmployee(Employee employee) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
-        try{
+        String sql = "UPDATE Employee SET SALARY = ?, POST = ? WHERE ShopName = ?";
+        try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
-            String sql = "UPDATE Employee SET IDNUM = ?, NAME = ?, GENDER = ?, SALARY = ?, " +
-                    "POST = ? WHERE ShopName = ?";
             PreparedStatement ps = c.prepareStatement(sql);
-            ps.setInt(1, employee.getIdNum());
-            ps.setString(2, employee.getName());
-            ps.setString(3, employee.getGender());
-            ps.setFloat(4, employee.getSalary());
-            ps.setString(5, employee.getPost());
-            ps.setString(6, employee.getShopName());
-            if (ps.executeUpdate() == 0){
+            ps.setFloat(1, employee.getSalary());
+            ps.setString(2, employee.getPost());
+            ps.setString(3, employee.getShopName());
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
+            c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;
@@ -108,20 +153,21 @@ public class EmloyeeDAOsql implements EmployeeDAO {
 
     @Override
     public boolean deleteEmployee(int id) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
-        try{
+        try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
             String sql = "DELETE FROM Employee WHERE IDNUM = ?";
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setInt(1, id);
-            if (ps.executeUpdate() == 0){
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
+            c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;

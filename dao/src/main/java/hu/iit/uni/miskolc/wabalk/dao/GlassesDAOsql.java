@@ -20,18 +20,21 @@ public class GlassesDAOsql implements GlassesDAO {
 
     @Override
     public void createGlasses(Glasses glasses) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
+        String sql = "INSERT INTO Glasses (Brand, Model, Price, AvailableAt, Gender, Sunglasses) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            String sql = "INSERT INTO Glasses (Brand, Model, Price, AvailableAt, Gender, Sunglasses " +
-                    "VALUES (" + glasses.getBrand() + ", " + glasses.getModel() + ", " + glasses.getPrice()
-                    + ", " + glasses.getAvailableAt() + ", " + glasses.getGender() + ", "
-                    + glasses.isSunglasses() + ");";
-            stmt.executeUpdate(sql);
-            stmt.close();
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1, glasses.getBrand());
+            ps.setString(2, glasses.getModel());
+            ps.setFloat(3, glasses.getPrice());
+            ps.setString(4, glasses.getAvailableAt());
+            ps.setString(5, glasses.getGender());
+            ps.setInt(6, glasses.isSunglasses() ? 1 : 0);
+            ps.executeUpdate();
+
             c.commit();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e) {
@@ -53,14 +56,14 @@ public class GlassesDAOsql implements GlassesDAO {
         String gender;
         boolean sunglasses;
         ArrayList<Glasses> glasses = new ArrayList<>();
+        String sql = "SELECT * FROM Glasses WHERE  Brand = \'" + brand + "\';";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Glasses WHERE  = "
-                    + brand + ";");
+            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 model = rs.getString("Model");
                 price = rs.getFloat("Price");
@@ -90,14 +93,14 @@ public class GlassesDAOsql implements GlassesDAO {
         String availableAt = null;
         String gender = null;
         boolean sunglasses = false;
+        String sql = "SELECT * FROM Glasses WHERE  Brand = \'" + brand + "\' AND " + "Model = \'" + model + "\';";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Glasses WHERE  Brand = "
-                    + brand + " AND " + "Model = " + model + ";");
+            PreparedStatement ps =c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
             if (rs.next() == true) {
                 price = rs.getFloat("Price");
                 availableAt = rs.getString("AvailableAt");
@@ -105,7 +108,6 @@ public class GlassesDAOsql implements GlassesDAO {
                 sunglasses = rs.getInt("Sunglasses") > 0 ? true : false;
             }
             rs.close();
-            stmt.close();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
@@ -133,6 +135,7 @@ public class GlassesDAOsql implements GlassesDAO {
             if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
+            c.commit();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
@@ -153,10 +156,11 @@ public class GlassesDAOsql implements GlassesDAO {
             String sql = "DELETE FROM Glasses WHERE Brand = ? AND Model = ?";
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, brand);
-            ps.setString(1, model);
+            ps.setString(2, model);
             if (ps.executeUpdate() == 0){
                 throw new NotFoundException();
             }
+            c.commit();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e){
             throw new AlreadyExistingException();

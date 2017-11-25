@@ -11,6 +11,7 @@ public interface AccessoriesService {
 
     Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
     Collection<Accessories> getAccessoriesByBrand(String brand) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
+    Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
 
     boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException, PersistanceException;
 

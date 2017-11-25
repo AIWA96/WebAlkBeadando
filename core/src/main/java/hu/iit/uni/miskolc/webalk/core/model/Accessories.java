@@ -67,4 +67,13 @@ public class Accessories {
         result = 31 * result + (price != +0.0f ? Float.floatToIntBits(price) : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Accessories{" +
+                "appellation='" + appellation + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price=" + price +
+                "}\n";
+    }
 }

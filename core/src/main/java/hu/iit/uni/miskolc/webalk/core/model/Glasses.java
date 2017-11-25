@@ -114,4 +114,16 @@ public class Glasses {
         result = 31 * result + (availableAt != null ? availableAt.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Glasses{" +
+                "brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", price=" + price +
+                ", availableAt='" + availableAt + '\'' +
+                ", gender='" + gender + '\'' +
+                ", sunglasses=" + sunglasses +
+                "}\n";
+    }
 }

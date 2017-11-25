@@ -27,6 +27,10 @@ public class AccessoriesServiceImpl implements AccessoriesService {
         return accessoriesDAO.getAccessoriesByBrand(brand);
     }
 
+    public Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException{
+        return accessoriesDAO.getAllAccessories();
+    }
+
     public boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException, PersistanceException {
         return accessoriesDAO.updateAccessories(accessories);
     }

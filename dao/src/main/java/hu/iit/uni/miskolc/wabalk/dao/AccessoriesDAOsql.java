@@ -10,9 +10,8 @@ import java.util.Collection;
 
 public class AccessoriesDAOsql implements AccessoriesDAO {
 
-    private static String OS = null;
     private String con;
-    private Connection c;
+    private Connection conn;
     private Statement stmt;
 
     public AccessoriesDAOsql() {
@@ -23,17 +22,19 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     public void createAccessories(Accessories accessories) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+            conn = DriverManager.getConnection(con);
+            conn.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            String sql = "INSERT INTO Accessories (Appellation, Brand, Price) VALUES ("
-                    + accessories.getAppellation() + ", " + accessories.getBrand() +
-                    accessories.getPrice() + ");";
-            stmt.executeUpdate(sql);
-            stmt.close();
-            c.commit();
-            c.close();
+            String sql = "INSERT INTO Accessories (Appellation, Brand, Price) VALUES (?, ?, ?)";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, accessories.getAppellation());
+            ps.setString(2, accessories.getBrand());
+            ps.setFloat(3, accessories.getPrice());
+            ps.executeUpdate();
+
+            conn.commit();
+            conn.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
         } catch (SQLDataException e) {
@@ -49,23 +50,22 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     public Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         String brand;
         float price;
-        ArrayList<Accessories> accessories = new ArrayList<>();
+        Collection<Accessories> accessories = new ArrayList<>();
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+            conn = DriverManager.getConnection(con);
 
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Accessories WHERE Appellation = "
-                    + appellation + ";");
+            String sql = "SELECT * FROM Accessories WHERE Appellation = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, appellation);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 brand = rs.getString("Brand");
                 price = rs.getFloat("Price");
                 accessories.add(new Accessories(appellation, brand, price));
             }
             rs.close();
-            stmt.close();
-            c.close();
+            conn.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
         } catch (SQLDataException e) {
@@ -82,13 +82,13 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     public Collection<Accessories> getAccessoriesByBrand(String brand) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         String appellation;
         float price;
-        ArrayList<Accessories> accessories = new ArrayList<>();
+        Collection<Accessories> accessories = new ArrayList<>();
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+            conn = DriverManager.getConnection(con);
+            conn.setAutoCommit(false);
 
-            stmt = c.createStatement();
+            stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Accessories WHERE Brand = "
                     + brand + ";");
             while (rs.next()) {
@@ -98,7 +98,41 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             }
             rs.close();
             stmt.close();
-            c.close();
+            conn.close();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new AlreadyExistingException();
+        } catch (SQLDataException e) {
+            throw new WrongDataTypeException();
+        } catch (SQLException e) {
+            throw new StorageException();
+        } catch (Exception e) {
+            throw new PersistanceException();
+        }
+        return accessories;
+    }
+
+    @Override
+    public Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
+        String appellation;
+        String brand;
+        float price;
+        Collection<Accessories> accessories = new ArrayList<>();
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
+            conn.setAutoCommit(false);
+
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Accessories");
+            while (rs.next()) {
+                appellation = rs.getString("Appellation");
+                brand = rs.getString("Brand");
+                price = rs.getFloat("Price");
+                accessories.add(new Accessories(appellation, brand, price));
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
         } catch (SQLDataException e) {
@@ -115,17 +149,18 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     public boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException, PersistanceException {
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+            conn = DriverManager.getConnection(con);
+            conn.setAutoCommit(false);
             String sql = "UPDATE Accessories SET Price = ? WHERE Appellation = ? AND Brand = ?";
-            PreparedStatement ps = c.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setFloat(1, accessories.getPrice());
             ps.setString(2, accessories.getAppellation());
             ps.setString(3, accessories.getBrand());
             if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
-            c.close();
+            conn.commit();
+            conn.close();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
         } catch (SQLException e) {
@@ -138,22 +173,41 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
 
     @Override
     public boolean deleteAccessories(Accessories accessories) throws ClassNotFoundException, StorageException, NotFoundException, AlreadyExistingException {
-        return deleteAccessoriesByBrand(accessories.getBrand());
+        String sql = "DELETE FROM Accessories WHERE Brand = ? AND Appellation = ?";
+        try{
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
+            conn.setAutoCommit(false);
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, accessories.getBrand());
+            ps.setString(2, accessories.getAppellation());
+            if (ps.executeUpdate() == 0){
+                throw new NotFoundException();
+            }
+            conn.commit();
+            conn.close();
+        } catch (SQLIntegrityConstraintViolationException e){
+            throw new AlreadyExistingException();
+        }catch ( SQLException e ) {
+            throw new StorageException();
+        }
+        return true;
     }
 
     @Override
     public boolean deleteAccessoriesByBrand(String brand) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
+        String sql = "DELETE FROM Accessories WHERE Brand = ?";
         try{
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
-            String sql = "DELETE FROM Accessories WHERE Brand = ?";
-            PreparedStatement ps = c.prepareStatement(sql);
+            conn = DriverManager.getConnection(con);
+            conn.setAutoCommit(false);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, brand);
             if (ps.executeUpdate() == 0){
                 throw new NotFoundException();
             }
-            c.close();
+            conn.commit();
+            conn.close();
         } catch (SQLIntegrityConstraintViolationException e){
             throw new AlreadyExistingException();
         }catch ( SQLException e ) {
