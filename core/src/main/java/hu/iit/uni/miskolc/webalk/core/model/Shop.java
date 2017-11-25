@@ -87,4 +87,13 @@ public class Shop {
         result = 31 * result + employees.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Shop{" +
+                "name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", employees=" + employees +
+                "}\n";
+    }
 }

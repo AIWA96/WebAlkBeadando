@@ -27,6 +27,10 @@ public class ShopServiceImpl implements ShopService {
         return shopDAO.getShopByLocation(location);
     }
 
+    @Override
+    public Collection<Shop> getAllShops() throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException {
+        return shopDAO.getAllShops();
+    }
 
     public boolean updateShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException {
         return shopDAO.updateShop(shop);

@@ -42,7 +42,11 @@ public class GlassesDAOsql implements GlassesDAO {
         } catch (SQLDataException e) {
             throw new WrongDataTypeException();
         } catch (SQLException e) {
-            throw new StorageException();
+            if (e.getErrorCode() == 19) {
+                throw new AlreadyExistingException();
+            } else {
+                throw new StorageException();
+            }
         } catch (Exception e) {
             throw new PersistanceException();
         }
@@ -99,7 +103,7 @@ public class GlassesDAOsql implements GlassesDAO {
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            PreparedStatement ps =c.prepareStatement(sql);
+            PreparedStatement ps = c.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next() == true) {
                 price = rs.getFloat("Price");
@@ -149,7 +153,7 @@ public class GlassesDAOsql implements GlassesDAO {
 
     @Override
     public boolean deleteGlasses(String brand, String model) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
-        try{
+        try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
@@ -157,14 +161,14 @@ public class GlassesDAOsql implements GlassesDAO {
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, brand);
             ps.setString(2, model);
-            if (ps.executeUpdate() == 0){
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;

@@ -7,6 +7,16 @@ import java.util.Collection;
 
 public interface AccessoriesService {
 
+    /**
+     * @param accessories
+     * @throws AlreadyExistingException
+     * @throws StorageNotAvailableException
+     * @throws StorageException
+     * @throws NotFoundException
+     * @throws NoNameException
+     * @throws PersistanceException
+     * @throws WrongDataTypeException
+     */
     void createAccessories(Accessories accessories) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
 
     Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;

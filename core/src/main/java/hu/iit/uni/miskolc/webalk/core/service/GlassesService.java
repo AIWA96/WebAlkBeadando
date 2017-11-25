@@ -7,6 +7,16 @@ import java.util.Collection;
 
 public interface GlassesService {
 
+    /**
+     * @param glasses
+     * @throws AlreadyExistingException
+     * @throws StorageNotAvailableException
+     * @throws StorageException
+     * @throws NotFoundException
+     * @throws NoNameException
+     * @throws PersistanceException
+     * @throws WrongDataTypeException
+     */
     void createGlass(Glasses glasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
 
     Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;

@@ -14,7 +14,6 @@ public class ShopDAOsql implements ShopDAO {
 
     private String con;
     private Connection c;
-    private Statement stmt;
 
     public ShopDAOsql() {
         con = ConnectionString.getConnectionString();
@@ -27,20 +26,24 @@ public class ShopDAOsql implements ShopDAO {
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            String sql = "INSERT INTO Shop (Name, Location) VALUES ("
-                    + shop.getName() + ", " + shop.getLocation() + ");";
-            stmt.executeUpdate(sql);
-            stmt.close();
+            String sql = "INSERT INTO Shop (Name, Location) VALUES (?, ?);";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1, shop.getName());
+            ps.setString(2, shop.getLocation());
+            ps.executeUpdate();
             c.commit();
             c.close();
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch (SQLDataException e){
+        } catch (SQLDataException e) {
             throw new WrongDataTypeException();
-        }catch (SQLException e){
-            throw new StorageException();
-        }catch ( Exception e ) {
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 19) {
+                throw new AlreadyExistingException();
+            } else {
+                throw new StorageException();
+            }
+        } catch (Exception e) {
             throw new PersistanceException();
         }
     }
@@ -48,87 +51,152 @@ public class ShopDAOsql implements ShopDAO {
     @Override
     public Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException, AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
         Collection<Employee> employees = new ArrayList<>();
-        String shopName = null;
-        String shopLocation = null;
+        String shopLocation;
+        String shopsql = "SELECT * FROM Shop WHERE Name = ?;";
+        String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM Shop WHERE Name = " + name + ";");
-            while (rs.next()){
-                shopName = rs.getString("Name");
+            PreparedStatement ps = c.prepareStatement(shopsql);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
                 shopLocation = rs.getString("Location");
+            } else {
+                throw new NotFoundException();
             }
 
-            rs = stmt.executeQuery("SELECT * FROM Employee WHERE ShopName = " + name +";");
-            while (rs.next()){
-                int id = rs.getInt("IDNUM");
-                String ename = rs.getString("NAME");
-                String gender = rs.getString("GENDER");
-                float salary = rs.getFloat("SALARY");
-                String post = rs.getString("POST");
-                employees.add(new Employee(id ,ename, gender, salary, post, name));
+            ps = c.prepareStatement(employeesql);
+            ps.setString(1, name);
+            ResultSet rs1 = ps.executeQuery();
+            while (rs1.next()) {
+                int id = rs1.getInt("IDNUM");
+                String ename = rs1.getString("NAME");
+                String gender = rs1.getString("GENDER");
+                float salary = rs1.getFloat("SALARY");
+                String post = rs1.getString("POST");
+                employees.add(new Employee(id, ename, gender, salary, post, name));
             }
             rs.close();
-            stmt.close();
             c.close();
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch (SQLDataException e){
+        } catch (SQLDataException e) {
             throw new WrongDataTypeException();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new StorageException();
-        }catch ( Exception e ) {
+        } catch (Exception e) {
             throw new PersistanceException();
         }
-        return new Shop(shopName, shopLocation, employees);
+        return new Shop(name, shopLocation, employees);
     }
 
     @Override
     public Collection<Shop> getShopByLocation(String location) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
-        Collection<Employee> employees = new ArrayList<>();
         List<String> shopNames = new ArrayList<>();
         ArrayList<Shop> shops = new ArrayList<>();
         String shopName;
+        String shopsql = "SELECT * FROM Shop WHERE Location = ?;";
+        String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM Shop WHERE Location = " + location + ";");
-            while (rs.next()){
+            PreparedStatement ps = c.prepareStatement(shopsql);
+            ps.setString(1, location);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
                 shopName = rs.getString("Name");
                 shopNames.add(shopName);
             }
 
-            for (int i = 0; i <= shopNames.size(); i++){
-                rs = stmt.executeQuery("SELECT * FROM Employee WHERE ShopName = " + shopNames.get(i) + ";");
-                while (rs.next()){
+            ps = c.prepareStatement(employeesql);
+            for (int i = 0; i < shopNames.size(); i++) {
+                Collection<Employee> employees = new ArrayList<>();
+                ps.setString(1, shopNames.get(i));
+                rs = ps.executeQuery();
+                while (rs.next()) {
                     int id = rs.getInt("IDNUM");
                     String ename = rs.getString("NAME");
                     String gender = rs.getString("GENDER");
                     float salary = rs.getFloat("SALARY");
                     String post = rs.getString("POST");
-                    employees.add(new Employee(id ,ename, gender, salary, post, shopNames.get(i)));
+                    employees.add(new Employee(id, ename, gender, salary, post, shopNames.get(i)));
                 }
                 shops.add(new Shop(shopNames.get(i), location, employees));
-                employees.clear();
             }
             rs.close();
-            stmt.close();
+            ps.close();
             c.close();
-        }catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch (SQLDataException e){
+        } catch (SQLDataException e) {
             throw new WrongDataTypeException();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new StorageException();
-        }catch ( Exception e ) {
+        } catch (Exception e) {
+            throw new PersistanceException();
+        }
+        return shops;
+    }
+
+    @Override
+    public Collection<Shop> getAllShops() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException {
+        List<String> shopNames = new ArrayList<>();
+        List<String> shopLocations = new ArrayList<>();
+        ArrayList<Shop> shops = new ArrayList<>();
+        String shopName;
+        String shopLocation = null;
+        String shopsql = "SELECT * FROM Shop;";
+        String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection(con);
+            c.setAutoCommit(false);
+
+            PreparedStatement ps = c.prepareStatement(shopsql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                shopName = rs.getString("Name");
+                shopLocation = rs.getString("Location");
+                shopNames.add(shopName);
+                shopLocations.add(shopLocation);
+            }
+
+            ps = c.prepareStatement(employeesql);
+            for (int i = 0; i < shopNames.size(); i++) {
+                Collection<Employee> employees = new ArrayList<>();
+                ps.setString(1, shopNames.get(i));
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("IDNUM");
+                    String ename = rs.getString("NAME");
+                    String gender = rs.getString("GENDER");
+                    float salary = rs.getFloat("SALARY");
+                    String post = rs.getString("POST");
+                    employees.add(new Employee(id, ename, gender, salary, post, shopNames.get(i)));
+                }
+                if (employees.isEmpty()) {
+                    continue;
+                }
+                shops.add(new Shop(shopNames.get(i), shopLocation, employees));
+            }
+            rs.close();
+            ps.close();
+            c.close();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new AlreadyExistingException();
+        } catch (SQLDataException e) {
+            throw new WrongDataTypeException();
+        } catch (SQLException e) {
+            throw new StorageException();
+        } catch (Exception e) {
             throw new PersistanceException();
         }
         return shops;
@@ -136,21 +204,23 @@ public class ShopDAOsql implements ShopDAO {
 
     @Override
     public boolean updateShop(Shop shop) throws NotFoundException, StorageNotAvailableException, AlreadyExistingException, StorageException, ClassNotFoundException {
-        try{
+        try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
             String sql = "UPDATE Shop SET NAME = ? WHERE LOCATION = ?";
             PreparedStatement ps = c.prepareStatement(sql);
-            ps.setString(1,shop.getName());
+            ps.setString(1, shop.getName());
             ps.setString(2, shop.getLocation());
-            if (ps.executeUpdate() == 0){
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
+            c.commit();
+            ps.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;
@@ -158,20 +228,21 @@ public class ShopDAOsql implements ShopDAO {
 
     @Override
     public boolean deleteShop(String name) throws AlreadyExistingException, StorageException, StorageNotAvailableException, ClassNotFoundException, NotFoundException {
-        try{
+        try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
             String sql = "DELETE FROM Shop WHERE Name = ?";
             PreparedStatement ps = c.prepareStatement(sql);
-            ps.setString(1,name);
-            if (ps.executeUpdate() == 0){
+            ps.setString(1, name);
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
+            c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;

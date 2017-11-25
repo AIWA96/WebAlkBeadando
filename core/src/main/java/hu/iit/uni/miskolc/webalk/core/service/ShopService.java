@@ -9,15 +9,14 @@ import java.util.Collection;
 public interface ShopService {
 
     /**
-     * @param name
-     * @param location
-     * @param employees
-     * @return
+     * @param shop
      * @throws AlreadyExistingException
      * @throws StorageNotAvailableException
      * @throws StorageException
      * @throws NotFoundException
      * @throws NoNameException
+     * @throws PersistanceException
+     * @throws WrongDataTypeException
      */
     void createShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
 
@@ -27,6 +26,7 @@ public interface ShopService {
      */
     Shop getShopByName(String name) throws WrongDataTypeException, NoEmployeeException, NoLocationException, StorageException, NoNameException, PersistanceException, AlreadyExistingException;
     Collection<Shop> getShopByLocation(String location) throws WrongDataTypeException, NoEmployeeException, NoLocationException, StorageException, NoNameException, PersistanceException, AlreadyExistingException;
+    Collection<Shop> getAllShops() throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
 
     boolean updateShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
 

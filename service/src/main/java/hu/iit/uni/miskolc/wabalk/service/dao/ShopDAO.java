@@ -9,6 +9,7 @@ public interface ShopDAO {
 
     Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException, AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
     Collection<Shop> getShopByLocation(String location) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
+    Collection<Shop> getAllShops() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
 
     boolean updateShop(Shop shop) throws NotFoundException, StorageNotAvailableException, AlreadyExistingException, StorageException, ClassNotFoundException;
 

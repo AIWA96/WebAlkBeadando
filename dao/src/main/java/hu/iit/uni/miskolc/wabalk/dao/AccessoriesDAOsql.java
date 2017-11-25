@@ -40,7 +40,11 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
         } catch (SQLDataException e) {
             throw new WrongDataTypeException();
         } catch (SQLException e) {
-            throw new StorageException();
+            if (e.getErrorCode() == 19) {
+                throw new AlreadyExistingException();
+            } else {
+                throw new StorageException();
+            }
         } catch (Exception e) {
             throw new PersistanceException();
         }
@@ -174,21 +178,21 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     @Override
     public boolean deleteAccessories(Accessories accessories) throws ClassNotFoundException, StorageException, NotFoundException, AlreadyExistingException {
         String sql = "DELETE FROM Accessories WHERE Brand = ? AND Appellation = ?";
-        try{
+        try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, accessories.getBrand());
             ps.setString(2, accessories.getAppellation());
-            if (ps.executeUpdate() == 0){
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
             conn.commit();
             conn.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;
@@ -197,20 +201,20 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     @Override
     public boolean deleteAccessoriesByBrand(String brand) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
         String sql = "DELETE FROM Accessories WHERE Brand = ?";
-        try{
+        try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, brand);
-            if (ps.executeUpdate() == 0){
+            if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
             conn.commit();
             conn.close();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             throw new AlreadyExistingException();
-        }catch ( SQLException e ) {
+        } catch (SQLException e) {
             throw new StorageException();
         }
         return true;
