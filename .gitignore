@@ -6,4 +6,4 @@
 # Maven
 log/
 */target/
-*/test/
+/dao/src/test/
