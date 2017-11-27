@@ -1,10 +1,20 @@
 package hu.iit.uni.miskolc.webalk.web.config;
 
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
+import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
+import hu.iit.uni.miskolc.webalk.core.service.GlassesService;
 import hu.iit.uni.miskolc.webalk.dao.AccessoriesDAOsql;
+import hu.iit.uni.miskolc.webalk.dao.EmployeeDAOsql;
+import hu.iit.uni.miskolc.webalk.dao.GlassesDAOsql;
 import hu.iit.uni.miskolc.webalk.service.AccessoriesServiceImpl;
+import hu.iit.uni.miskolc.webalk.service.EmployeeServiceImpl;
+import hu.iit.uni.miskolc.webalk.service.GlassesServiceImpl;
 import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
+import hu.iit.uni.miskolc.webalk.service.dao.EmployeeDAO;
+import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
 import hu.uni.miskolc.webalk.controller.AccessoriesController;
+import hu.uni.miskolc.webalk.controller.EmployeeController;
+import hu.uni.miskolc.webalk.controller.GlassesController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,7 +36,7 @@ public class WebConfig {
         return new AccessoriesController(accessoriesService());
     }
 
-   /* @Bean
+    /*@Bean
     public ShopDAO shopDAO(){
         return new ShopDAOsql();
     }
@@ -40,19 +50,19 @@ public class WebConfig {
     public ShopController shopController(){
         return new ShopController(shopService());
     }
-
+*/
     @Bean
-    public EmployeeDAO employeeDAO(){
+    public EmployeeDAO employeeDAO() {
         return new EmployeeDAOsql();
     }
 
     @Bean
-    public EmployeeService employeeService(){
+    public EmployeeService employeeService() {
         return new EmployeeServiceImpl(employeeDAO());
     }
 
     @Bean
-    public EmployeeController employeeController(){
+    public EmployeeController employeeController() {
         return new EmployeeController(employeeService());
     }
 
@@ -68,7 +78,6 @@ public class WebConfig {
 
     @Bean
     public GlassesController glassesController(){
-        return GlassesController(glassesService());
+        return new GlassesController(glassesService());
     }
-    */
 }
