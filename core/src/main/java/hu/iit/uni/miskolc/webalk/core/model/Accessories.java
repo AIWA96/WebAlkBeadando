@@ -1,7 +1,7 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
 import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;
-import hu.iit.uni.miskolc.webalk.core.exceptions.NoAppelationException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoAppellationException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 
 public class Accessories {
@@ -9,7 +9,7 @@ public class Accessories {
     private String brand;
     private float price;
 
-    public Accessories(String appellation, String brand, float price) throws NoAppelationException, NoNameException, InvalidPriceException {
+    public Accessories(String appellation, String brand, float price) throws NoAppellationException, NoNameException, InvalidPriceException {
         setAppellation(appellation);
         setBrand(brand);
         setPrice(price);
@@ -19,9 +19,9 @@ public class Accessories {
         return appellation;
     }
 
-    public void setAppellation(String appellation) throws NoAppelationException {
+    public void setAppellation(String appellation) throws NoAppellationException {
         if (appellation == null || appellation == ""){
-            throw new NoAppelationException("Appelation must be set!");
+            throw new NoAppellationException("Appelation must be set!");
         }
         this.appellation = appellation;
     }

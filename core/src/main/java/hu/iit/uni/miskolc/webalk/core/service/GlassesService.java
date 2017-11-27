@@ -14,15 +14,15 @@ public interface GlassesService {
      * @throws StorageException
      * @throws NotFoundException
      * @throws NoNameException
-     * @throws PersistanceException
+     * @throws PersistenceException
      * @throws WrongDataTypeException
      */
-    void createGlass(Glasses glasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
+    void createGlass(Glasses glasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
 
-    Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
-    Glasses getGlasses(String brand, String model) throws NoLocationSetException, InvalidPriceException, AlreadyExistingException, StorageException, NoNameException, PersistanceException, WrongDataTypeException, NoGenderException;
+    Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Glasses getGlasses(String brand, String model) throws NoLocationSetException, InvalidPriceException, AlreadyExistingException, StorageException, NoNameException, PersistenceException, WrongDataTypeException, NoGenderException;
 
-    boolean updateGlassess(Glasses glasses) throws PersistanceException, StorageException, AlreadyExistingException;
+    boolean updateGlassess(Glasses glasses) throws PersistenceException, StorageException, AlreadyExistingException;
 
     boolean deleteGlassess(Glasses glasses) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
     boolean deleteGlasses(String brand, String model) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;

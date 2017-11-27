@@ -15,17 +15,17 @@ public interface EmployeeService {
      * @throws StorageException
      * @throws NotFoundException
      * @throws NoNameException
-     * @throws PersistanceException
+     * @throws PersistenceException
      * @throws WrongDataTypeException
      */
-    void createEmployee(Employee employee) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
+    void createEmployee(Employee employee) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
 
     /**
      * @param idNum
      * @return an Employee
      */
-    Employee getEmployee(int idNum) throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistanceException, AlreadyExistingException, InvalidSalaryException;
-    Collection<Employee> getAllEmployee() throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistanceException, AlreadyExistingException, InvalidSalaryException;
+    Employee getEmployee(int idNum) throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistenceException, AlreadyExistingException, InvalidSalaryException;
+    Collection<Employee> getAllEmployee() throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistenceException, AlreadyExistingException, InvalidSalaryException;
 
     boolean updateEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
 

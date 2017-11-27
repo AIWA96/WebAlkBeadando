@@ -14,16 +14,16 @@ public interface AccessoriesService {
      * @throws StorageException
      * @throws NotFoundException
      * @throws NoNameException
-     * @throws PersistanceException
+     * @throws PersistenceException
      * @throws WrongDataTypeException
      */
-    void createAccessories(Accessories accessories) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistanceException, WrongDataTypeException;
+    void createAccessories(Accessories accessories) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
 
-    Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
-    Collection<Accessories> getAccessoriesByBrand(String brand) throws AlreadyExistingException, PersistanceException, StorageException, WrongDataTypeException;
-    Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistanceException;
+    Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Collection<Accessories> getAccessoriesByBrand(String brand) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException;
 
-    boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException, PersistanceException;
+    boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException, PersistenceException;
 
     boolean deleteAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
     boolean deleteAccessories(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;

@@ -44,7 +44,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <packageName>hu.iit.uni.miskolc.wabalk.controller.dto</packageName>
+                    <packageName>hu.iit.uni.miskolc.webalk.controller.dto</packageName>
                     <sources>
                         <source>${project.basedir}/src/main/resources</source>
                     </sources>
