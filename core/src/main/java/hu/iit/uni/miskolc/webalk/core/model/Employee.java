@@ -1,6 +1,9 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
+import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidSalaryException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoPostException;
 
 public class Employee {
     private int idNum;
@@ -22,7 +25,7 @@ public class Employee {
      * @throws InvalidSalaryException
      * @throws NoGenderException
      */
-    public Employee(int idNum, String name, String gender, float salary, String  post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
+    public Employee(int idNum, String name, String gender, float salary, String post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
         this.idNum = idNum;
         setShopName(shopName);
         setName(name);
@@ -44,7 +47,7 @@ public class Employee {
     }
 
     public void setName(String name) throws NoNameException {
-        if (name == null){
+        if (name == null) {
             throw new NoNameException("A shop must have a name!");
         }
         this.name = name;
@@ -55,7 +58,7 @@ public class Employee {
     }
 
     public void setGender(String gender) throws NoGenderException {
-        if (gender == null){
+        if (gender == null) {
             throw new NoGenderException("The gender must have set for a person!");
         }
         this.gender = gender;
@@ -66,7 +69,7 @@ public class Employee {
     }
 
     public void setSalary(float salary) throws InvalidSalaryException {
-        if (salary < 85000.0f){
+        if (salary < 85000.0f) {
             throw new InvalidSalaryException("The salary cannot be less then the minimum wage!");
         }
         this.salary = salary;
@@ -77,7 +80,7 @@ public class Employee {
     }
 
     public void setPost(String post) throws NoPostException {
-        if (post == null){
+        if (post == null) {
             throw new NoPostException("An employee must have a post!");
         }
         this.post = post;
@@ -88,7 +91,7 @@ public class Employee {
     }
 
     public void setShopName(String shopName) throws NoNameException {
-        if (shopName == null || shopName == ""){
+        if (shopName == null || shopName == "") {
             throw new NoNameException("Shop name where the employee is working must be set!");
         }
         this.shopName = shopName;

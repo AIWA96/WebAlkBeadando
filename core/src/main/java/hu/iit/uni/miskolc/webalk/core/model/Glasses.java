@@ -1,6 +1,9 @@
 package hu.iit.uni.miskolc.webalk.core.model;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
+import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoLocationSetException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 
 public class Glasses {
     private String brand;
@@ -35,7 +38,7 @@ public class Glasses {
     }
 
     public void setBrand(String brand) throws NoNameException {
-        if (brand == null){
+        if (brand == null) {
             throw new NoNameException("A sunglass must have a brand name!");
         }
         this.brand = brand;
@@ -46,7 +49,7 @@ public class Glasses {
     }
 
     public void setModel(String model) throws NoNameException {
-        if (model == null){
+        if (model == null) {
             throw new NoNameException("A sunglass must have a model name!");
         }
         this.model = model;
@@ -57,7 +60,7 @@ public class Glasses {
     }
 
     public void setPrice(float price) throws InvalidPriceException {
-        if (price < 1){
+        if (price < 1) {
             throw new InvalidPriceException("A price cannot be negative!");
         }
         this.price = price;
@@ -68,7 +71,7 @@ public class Glasses {
     }
 
     public void setAvailableAt(String availableAt) throws NoLocationSetException {
-        if (availableAt == null || availableAt == ""){
+        if (availableAt == null || availableAt == "") {
             throw new NoLocationSetException("The shop's location must be set!");
         }
         this.availableAt = availableAt;
@@ -79,7 +82,7 @@ public class Glasses {
     }
 
     public void setGender(String gender) throws NoGenderException {
-        if (gender == null){
+        if (gender == null) {
             throw new NoGenderException("A gender must be set!");
         }
         this.gender = gender;

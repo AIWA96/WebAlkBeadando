@@ -1,9 +1,9 @@
 package hu.iit.uni.miskolc.webalk.service;
 
-import hu.iit.uni.miskolc.webalk.service.dao.ShopDAO;
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Shop;
 import hu.iit.uni.miskolc.webalk.core.service.ShopService;
+import hu.iit.uni.miskolc.webalk.service.dao.ShopDAO;
 
 import java.util.Collection;
 

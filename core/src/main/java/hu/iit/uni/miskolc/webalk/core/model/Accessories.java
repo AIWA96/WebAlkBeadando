@@ -20,7 +20,7 @@ public class Accessories {
     }
 
     public void setAppellation(String appellation) throws NoAppellationException {
-        if (appellation == null || appellation == ""){
+        if (appellation == null || appellation == "") {
             throw new NoAppellationException("Appelation must be set!");
         }
         this.appellation = appellation;
@@ -31,7 +31,7 @@ public class Accessories {
     }
 
     public void setBrand(String brand) throws NoNameException {
-        if (brand == null || brand == ""){
+        if (brand == null || brand == "") {
             throw new NoNameException("Accessori must have a brand!");
         }
         this.brand = brand;
@@ -42,7 +42,7 @@ public class Accessories {
     }
 
     public void setPrice(float price) throws InvalidPriceException {
-        if (price < 1){
+        if (price < 1) {
             throw new InvalidPriceException("The price cannot be negative!");
         }
         this.price = price;

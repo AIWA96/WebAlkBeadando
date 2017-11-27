@@ -1,9 +1,9 @@
 package hu.iit.uni.miskolc.webalk.service;
 
-import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
+import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
 
 import java.util.Collection;
 

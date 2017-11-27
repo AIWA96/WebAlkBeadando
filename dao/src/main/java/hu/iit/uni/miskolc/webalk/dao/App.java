@@ -9,10 +9,8 @@ import java.sql.Statement;
  * c = DriverManager.getConnection("jdbc:sqlite:/home/dani/IdeaProjects/WebAlkBeadando/dao/src/resources/glassShop.db");
  * c = DriverManager.getConnection("jdbc:sqlite:C:/Users/Dani/IdeaProjects/WebAlkBeadando/dao/src/resources/glassShop.db");
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
+public class App {
+    public static void main(String[] args) {
         String con = "jdbc:sqlite:C:/Users/Dani/IdeaProjects/WebAlkBeadando/dao/src/resources/glassShop.db";
         Connection c;
         Statement stmt;
@@ -24,22 +22,22 @@ public class App
             System.out.println("Opened database successfully\n\n\nShops:");
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM Shop;" );
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Shop;");
 
-            while ( rs.next() ) {
-                String  name = rs.getString("NAME");
-                String  location = rs.getString("LOCATION");
+            while (rs.next()) {
+                String name = rs.getString("NAME");
+                String location = rs.getString("LOCATION");
 
-                System.out.println( "Name = " + name );
-                System.out.println( "Location = " + location );
+                System.out.println("Name = " + name);
+                System.out.println("Location = " + location);
                 System.out.println();
             }
 
             System.out.println("Employee:");
             rs = stmt.executeQuery("SELECT * FROM Employee;");
-            while ( rs.next() ) {
+            while (rs.next()) {
                 int id = rs.getInt("IDNUM");
-                String  name = rs.getString("NAME");
+                String name = rs.getString("NAME");
                 String gender = rs.getString("GENDER");
                 float salary = rs.getFloat("SALARY");
                 String post = rs.getString("POST");
@@ -56,7 +54,7 @@ public class App
 
             System.out.println("Glasses");
             rs = stmt.executeQuery("SELECT * FROM Glasses");
-            while (rs.next()){
+            while (rs.next()) {
                 String brand = rs.getString("Brand");
                 String model = rs.getString("Model");
                 float price = rs.getFloat("Price");
@@ -75,7 +73,7 @@ public class App
 
             System.out.println("Accessories");
             rs = stmt.executeQuery("SELECT * FROM Accessories");
-            while (rs.next()){
+            while (rs.next()) {
                 String appellation = rs.getString("Appellation");
                 String brand = rs.getString("Brand");
                 float price = rs.getFloat("Price");
@@ -89,15 +87,15 @@ public class App
             rs.close();
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Operation done successfully");
 
     }
 
-    public static void createTable(String sql, String con){
+    public static void createTable(String sql, String con) {
         Connection c;
         Statement stmt;
 
@@ -110,8 +108,8 @@ public class App
             stmt.executeUpdate(sql);
             stmt.close();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Table created successfully");
@@ -139,7 +137,7 @@ public class App
                     "FOREIGN KEY (ShopName) REFERENCES Shop(NAME))";*/
     }
 
-    public static void insertInto(String con){
+    public static void insertInto(String con) {
         /*
         * insertInto(con);
         * System.out.println("Insert DONE!\n");
@@ -173,8 +171,8 @@ public class App
             stmt.close();
             c.commit();
             c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         System.out.println("Records created successfully");

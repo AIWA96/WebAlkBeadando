@@ -1,10 +1,9 @@
 package hu.iit.uni.miskolc.webalk.web.config;
 
+import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
 import hu.iit.uni.miskolc.webalk.dao.AccessoriesDAOsql;
 import hu.iit.uni.miskolc.webalk.service.AccessoriesServiceImpl;
 import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
-
-import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
 import hu.uni.miskolc.webalk.controller.AccessoriesController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,17 +12,17 @@ import org.springframework.context.annotation.Configuration;
 public class WebConfig {
 
     @Bean
-    public AccessoriesDAO accessoriesDAO(){
+    public AccessoriesDAO accessoriesDAO() {
         return new AccessoriesDAOsql();
     }
 
     @Bean
-    public AccessoriesService accessoriesService(){
+    public AccessoriesService accessoriesService() {
         return new AccessoriesServiceImpl(accessoriesDAO());
     }
 
     @Bean
-    public AccessoriesController accessoriesController(){
+    public AccessoriesController accessoriesController() {
         return new AccessoriesController(accessoriesService());
     }
 

@@ -1,9 +1,9 @@
 package hu.iit.uni.miskolc.webalk.service;
 
-import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
 import hu.iit.uni.miskolc.webalk.core.service.GlassesService;
+import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
 
 import java.util.Collection;
 
