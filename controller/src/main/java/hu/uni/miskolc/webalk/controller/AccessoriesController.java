@@ -5,6 +5,7 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,5 +94,16 @@ public class AccessoriesController {
         } catch (WrongDataTypeException e) {
             e.printStackTrace();
         }
+    }
+
+    @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT, reason = "Adatbázis hiba!")
+    @ExceptionHandler(StorageException.class)
+    public void dataBaseError() {
+
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public String errorOccurred() {
+        return "error";
     }
 }
