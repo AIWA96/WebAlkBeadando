@@ -5,7 +5,7 @@
             <xs:sequence>
                 <xs:element name="ShopName" type="xs:string"/>
                 <xs:element name="Location" type="xs:string"/>
-                <xs:element name="Employees">
+                <xs:element name="Employees" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="Id" type="xs:int"/>

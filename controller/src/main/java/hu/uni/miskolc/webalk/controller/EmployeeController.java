@@ -5,6 +5,7 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class EmployeeController {
     @RequestMapping(value = {"/getemployees"}, method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Collection<Employee> listAllGlasses() {
+    public Collection<Employee> listAllEmployees() {
         try {
             return employeeService.getAllEmployee();
         } catch (WrongDataTypeException e) {
@@ -79,24 +80,12 @@ public class EmployeeController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void add(@RequestBody EmployeeRequest employeeRequest) {
-        Employee employee = null;
-
         try {
-            employee = new Employee(employeeRequest.getId(), employeeRequest.getName(),
+
+            employeeService.createEmployee(new Employee(employeeRequest.getId(), employeeRequest.getName(),
                     employeeRequest.getGender(), employeeRequest.getSalary(),
-                    employeeRequest.getPost(), employeeRequest.getShopName());
-        } catch (NoNameException e) {
-            e.printStackTrace();
-        } catch (NoPostException e) {
-            e.printStackTrace();
-        } catch (InvalidSalaryException e) {
-            e.printStackTrace();
-        } catch (NoGenderException e) {
-            e.printStackTrace();
-        }
+                    employeeRequest.getPost(), employeeRequest.getShopName()));
 
-        try {
-            employeeService.createEmployee(employee);
         } catch (AlreadyExistingException e) {
             e.printStackTrace();
         } catch (StorageNotAvailableException e) {
@@ -111,6 +100,52 @@ public class EmployeeController {
             e.printStackTrace();
         } catch (WrongDataTypeException e) {
             e.printStackTrace();
+        } catch (NoPostException e) {
+            e.printStackTrace();
+        } catch (NoGenderException e) {
+            e.printStackTrace();
+        } catch (InvalidSalaryException e) {
+            e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "/updateemployee", method = {RequestMethod.POST},
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public boolean update(@RequestBody EmployeeRequest employeeRequest) {
+        try {
+            return employeeService.updateEmployee(new Employee(employeeRequest.getId(), employeeRequest.getName(),
+                    employeeRequest.getGender(), employeeRequest.getSalary(), employeeRequest.getPost(),
+                    employeeRequest.getShopName()));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (AlreadyExistingException e) {
+            e.printStackTrace();
+        } catch (StorageException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (NoNameException e) {
+            e.printStackTrace();
+        } catch (NoPostException e) {
+            e.printStackTrace();
+        } catch (InvalidSalaryException e) {
+            e.printStackTrace();
+        } catch (NoGenderException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT, reason = "Adatbázis hiba!")
+    @ExceptionHandler(StorageException.class)
+    public void dataBaseError() {
+
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public String errorOccurred() {
+        return "error";
     }
 }

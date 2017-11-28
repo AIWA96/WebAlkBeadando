@@ -29,5 +29,5 @@ public interface AccessoriesService {
 
     boolean deleteAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
 
-    boolean deleteAccessories(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteAccessoriesByBrand(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
 }

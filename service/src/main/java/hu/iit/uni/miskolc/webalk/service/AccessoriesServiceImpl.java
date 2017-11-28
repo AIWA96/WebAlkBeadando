@@ -39,7 +39,7 @@ public class AccessoriesServiceImpl implements AccessoriesService {
         return accessoriesDAO.deleteAccessories(accessories);
     }
 
-    public boolean deleteAccessories(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
+    public boolean deleteAccessoriesByBrand(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
         return accessoriesDAO.deleteAccessoriesByBrand(brand);
     }
 }
