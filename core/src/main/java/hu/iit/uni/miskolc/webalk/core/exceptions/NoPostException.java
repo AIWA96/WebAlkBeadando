@@ -4,19 +4,19 @@ public class NoPostException extends Exception {
     public NoPostException() {
     }
 
-    public NoPostException(String message) {
-        super(message);
+    public NoPostException(String s) {
+        super(s);
     }
 
-    public NoPostException(String message, Throwable cause) {
-        super(message, cause);
+    public NoPostException(String s, Throwable throwable) {
+        super(s, throwable);
     }
 
-    public NoPostException(Throwable cause) {
-        super(cause);
+    public NoPostException(Throwable throwable) {
+        super(throwable);
     }
 
-    public NoPostException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public NoPostException(String s, Throwable throwable, boolean b, boolean b1) {
+        super(s, throwable, b, b1);
     }
 }
