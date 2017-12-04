@@ -81,7 +81,6 @@ public class EmployeeController {
     @ResponseBody
     public void add(@RequestBody EmployeeRequest employeeRequest) {
         try {
-
             employeeService.createEmployee(new Employee(employeeRequest.getId(), employeeRequest.getName(),
                     employeeRequest.getGender(), employeeRequest.getSalary(),
                     employeeRequest.getPost(), employeeRequest.getShopName()));

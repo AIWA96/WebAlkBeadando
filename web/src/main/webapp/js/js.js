@@ -15,3 +15,13 @@ jQuery(function () {
 
     }
 })
+
+
+$(document).ready(function () {
+    $("a").click(function () {
+        var ButtonText = $(this).text();
+        $.get(ButtonText + ".html", function (data) {
+            document.getElementById('content').innerHTML = data;
+        });
+    });
+});
