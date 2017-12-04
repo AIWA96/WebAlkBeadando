@@ -1,4 +1,4 @@
-package hu.iit.uni.miskolc.webalk.core.exceptions;
+package hu.iit.uni.miskolc.webalk.core.service.exceptions;
 
 public class PersistenceException extends Exception{
     public PersistenceException() {

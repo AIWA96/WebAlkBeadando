@@ -1,37 +1,26 @@
 package hu.iit.uni.miskolc.webalk.core.service;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Shop;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 
 import java.util.Collection;
 
 public interface ShopService {
 
-    /**
-     * @param shop
-     * @throws AlreadyExistingException
-     * @throws StorageNotAvailableException
-     * @throws StorageException
-     * @throws NotFoundException
-     * @throws NoNameException
-     * @throws PersistenceException
-     * @throws WrongDataTypeException
-     */
-    void createShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
+    void createShop(Shop shop) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    /**
-     * @param name
-     * @return Shop
-     */
-    Shop getShopByName(String name) throws WrongDataTypeException, NoEmployeeException, NoLocationException, StorageException, NoNameException, PersistenceException, AlreadyExistingException;
+    Shop getShopByName(String name) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    Collection<Shop> getShopByLocation(String location) throws WrongDataTypeException, NoEmployeeException, NoLocationException, StorageException, NoNameException, PersistenceException, AlreadyExistingException;
+    Collection<Shop> getShopByLocation(String location) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    Collection<Shop> getAllShops() throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Collection<Shop> getAllShops() throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException;
 
-    boolean updateShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
+    boolean updateShop(Shop shop) throws PersistenceException, ExistingProblemException, StorageProblemException;
 
-    boolean deleteShop(String name) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
+    boolean deleteShop(String name) throws PersistenceException, ExistingProblemException, StorageProblemException;
 
-    boolean deleteShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException;
+    boolean deleteShop(Shop shop) throws PersistenceException, ExistingProblemException, StorageProblemException;
 }

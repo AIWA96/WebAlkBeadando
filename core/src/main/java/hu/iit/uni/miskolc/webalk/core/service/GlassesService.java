@@ -1,31 +1,24 @@
 package hu.iit.uni.miskolc.webalk.core.service;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 
 import java.util.Collection;
 
 public interface GlassesService {
 
-    /**
-     * @param glasses
-     * @throws AlreadyExistingException
-     * @throws StorageNotAvailableException
-     * @throws StorageException
-     * @throws NotFoundException
-     * @throws NoNameException
-     * @throws PersistenceException
-     * @throws WrongDataTypeException
-     */
-    void createGlass(Glasses glasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
+    void createGlass(Glasses glasses) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Collection<Glasses> getGlasses(String brand) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    Glasses getGlasses(String brand, String model) throws NoLocationSetException, InvalidPriceException, AlreadyExistingException, StorageException, NoNameException, PersistenceException, WrongDataTypeException, NoGenderException;
+    Glasses getGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    boolean updateGlassess(Glasses glasses) throws PersistenceException, StorageException, AlreadyExistingException;
+    boolean updateGlasses(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
-    boolean deleteGlassess(Glasses glasses) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteGlassess(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
-    boolean deleteGlasses(String brand, String model) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, PersistenceException;
 }

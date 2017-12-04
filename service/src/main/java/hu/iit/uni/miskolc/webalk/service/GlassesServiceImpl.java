@@ -1,9 +1,13 @@
 package hu.iit.uni.miskolc.webalk.service;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
 import hu.iit.uni.miskolc.webalk.core.service.GlassesService;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
 
 import java.util.Collection;
 
@@ -15,27 +19,81 @@ public class GlassesServiceImpl implements GlassesService {
         this.glassesDAO = glassesDAO;
     }
 
-    public void createGlass(Glasses glasses) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException {
-        glassesDAO.createGlasses(glasses);
+    public void createGlass(Glasses glasses) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            glassesDAO.createGlasses(glasses);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (AlreadyExistingException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        }catch (Exception e){
+            throw new PersistenceException();
+        }
     }
 
-    public Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException {
-        return glassesDAO.getGlasses(brand);
+    public Collection<Glasses> getGlasses(String brand) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            return glassesDAO.getGlasses(brand);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public Glasses getGlasses(String brand, String model) throws NoLocationSetException, InvalidPriceException, AlreadyExistingException, StorageException, NoNameException, PersistenceException, WrongDataTypeException, NoGenderException {
-        return glassesDAO.getGlasses(brand, model);
+    public Glasses getGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            return glassesDAO.getGlasses(brand, model);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public boolean updateGlassess(Glasses glasses) throws PersistenceException, StorageException, AlreadyExistingException {
-        return glassesDAO.updateGlasses(glasses);
+    public boolean updateGlasses(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException {
+        try {
+            return glassesDAO.updateGlasses(glasses);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException | AlreadyExistingException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public boolean deleteGlassess(Glasses glasses) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
-        return glassesDAO.deleteGlasses(glasses);
+    public boolean deleteGlassess(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException {
+        try {
+            return glassesDAO.deleteGlasses(glasses);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public boolean deleteGlasses(String brand, String model) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
-        return glassesDAO.deleteGlasses(brand, model);
+    public boolean deleteGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, PersistenceException {
+        try {
+            return glassesDAO.deleteGlasses(brand, model);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 }

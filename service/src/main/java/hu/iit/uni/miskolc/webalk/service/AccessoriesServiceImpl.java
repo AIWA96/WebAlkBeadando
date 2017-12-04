@@ -1,9 +1,13 @@
 package hu.iit.uni.miskolc.webalk.service;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
 
 import java.util.Collection;
 
@@ -15,31 +19,95 @@ public class AccessoriesServiceImpl implements AccessoriesService {
         this.accessoriesDAO = accessoriesDAO;
     }
 
-    public void createAccessories(Accessories accessories) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException {
-        accessoriesDAO.createAccessories(accessories);
+    public void createAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            accessoriesDAO.createAccessories(accessories);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (AlreadyExistingException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException {
-        return accessoriesDAO.getAccessoriesByAppellation(appellation);
+    public Collection<Accessories> getAccessoriesByAppellation(String appellation) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            return accessoriesDAO.getAccessoriesByAppellation(appellation);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public Collection<Accessories> getAccessoriesByBrand(String brand) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException {
-        return accessoriesDAO.getAccessoriesByBrand(brand);
+    public Collection<Accessories> getAccessoriesByBrand(String brand) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            return accessoriesDAO.getAccessoriesByBrand(brand);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
-        return accessoriesDAO.getAllAccessories();
+    public Collection<Accessories> getAllAccessories() throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            return accessoriesDAO.getAllAccessories();
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (WrongFormatException e) {
+            throw new MissingArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException, PersistenceException {
-        return accessoriesDAO.updateAccessories(accessories);
+    public boolean updateAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+        try {
+            return accessoriesDAO.updateAccessories(accessories);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException | AlreadyExistingException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public boolean deleteAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
-        return accessoriesDAO.deleteAccessories(accessories);
+    public boolean deleteAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, PersistenceException {
+        try {
+            return accessoriesDAO.deleteAccessories(accessories);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 
-    public boolean deleteAccessoriesByBrand(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
-        return accessoriesDAO.deleteAccessoriesByBrand(brand);
+    public boolean deleteAccessoriesByBrand(String brand) throws StorageProblemException, ExistingProblemException, PersistenceException {
+        try {
+            return accessoriesDAO.deleteAccessoriesByBrand(brand);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
     }
 }

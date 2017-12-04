@@ -1,36 +1,24 @@
 package hu.iit.uni.miskolc.webalk.core.service;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 
 import java.util.Collection;
 
 public interface EmployeeService {
 
+    void createEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    /**
-     * @param employee
-     * @throws AlreadyExistingException
-     * @throws StorageNotAvailableException
-     * @throws StorageException
-     * @throws NotFoundException
-     * @throws NoNameException
-     * @throws PersistenceException
-     * @throws WrongDataTypeException
-     */
-    void createEmployee(Employee employee) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
+    Employee getEmployee(int idNum) throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException;
 
-    /**
-     * @param idNum
-     * @return an Employee
-     */
-    Employee getEmployee(int idNum) throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistenceException, AlreadyExistingException, InvalidSalaryException;
+    Collection<Employee> getAllEmployee() throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException;
 
-    Collection<Employee> getAllEmployee() throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistenceException, AlreadyExistingException, InvalidSalaryException;
+    boolean updateEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
-    boolean updateEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteEmployee(int idNum) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
-    boolean deleteEmployee(int idNum) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
-
-    boolean deleteEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, PersistenceException;
 }

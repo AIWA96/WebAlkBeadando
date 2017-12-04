@@ -4,6 +4,8 @@ import hu.iit.uni.miskolc.webalk.controller.dto.AccessoriesRequest;
 import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

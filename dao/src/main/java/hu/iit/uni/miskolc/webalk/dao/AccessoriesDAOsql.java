@@ -1,8 +1,9 @@
 package hu.iit.uni.miskolc.webalk.dao;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;

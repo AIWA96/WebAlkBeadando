@@ -1,33 +1,26 @@
 package hu.iit.uni.miskolc.webalk.core.service;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 
 import java.util.Collection;
 
 public interface AccessoriesService {
 
-    /**
-     * @param accessories
-     * @throws AlreadyExistingException
-     * @throws StorageNotAvailableException
-     * @throws StorageException
-     * @throws NotFoundException
-     * @throws NoNameException
-     * @throws PersistenceException
-     * @throws WrongDataTypeException
-     */
-    void createAccessories(Accessories accessories) throws AlreadyExistingException, StorageNotAvailableException, StorageException, NotFoundException, NoNameException, PersistenceException, WrongDataTypeException;
+    void createAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    Collection<Accessories> getAccessoriesByAppellation(String appellation) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Collection<Accessories> getAccessoriesByAppellation(String appellation) throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException;
 
-    Collection<Accessories> getAccessoriesByBrand(String brand) throws AlreadyExistingException, PersistenceException, StorageException, WrongDataTypeException;
+    Collection<Accessories> getAccessoriesByBrand(String brand) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    Collection<Accessories> getAllAccessories() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException;
+    Collection<Accessories> getAllAccessories() throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    boolean updateAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException, PersistenceException;
+    boolean updateAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException;
 
-    boolean deleteAccessories(Accessories accessories) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
-    boolean deleteAccessoriesByBrand(String brand) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException;
+    boolean deleteAccessoriesByBrand(String brand) throws StorageProblemException, ExistingProblemException, PersistenceException;
 }

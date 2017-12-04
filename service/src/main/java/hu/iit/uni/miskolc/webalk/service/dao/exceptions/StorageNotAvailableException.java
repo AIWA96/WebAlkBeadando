@@ -1,4 +1,4 @@
-package hu.iit.uni.miskolc.webalk.core.exceptions;
+package hu.iit.uni.miskolc.webalk.service.dao.exceptions;
 
 public class StorageNotAvailableException extends Exception {
     public StorageNotAvailableException() {
