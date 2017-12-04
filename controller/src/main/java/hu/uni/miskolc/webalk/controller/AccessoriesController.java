@@ -1,11 +1,15 @@
 package hu.uni.miskolc.webalk.controller;
 
 import hu.iit.uni.miskolc.webalk.controller.dto.AccessoriesRequest;
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
+import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoAppellationException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
+import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,19 +30,8 @@ public class AccessoriesController {
     @RequestMapping(value = {"/getaccessories"}, method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Collection<Accessories> listAllAccessories() {
-        try {
-            return accessoriesService.getAllAccessories();
-        } catch (AlreadyExistingException e) {
-            e.printStackTrace();
-        } catch (WrongDataTypeException e) {
-            e.printStackTrace();
-        } catch (StorageException e) {
-            e.printStackTrace();
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Collection<Accessories> listAllAccessories() throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
+        return accessoriesService.getAllAccessories();
     }
 
     @RequestMapping(value = {"/getaccessories/{appellation}"},
@@ -47,85 +40,44 @@ public class AccessoriesController {
 
     @ResponseBody
     public Collection<Accessories> listAccessoriesByAppellation(
-            @PathVariable(value = "appellation") String appellation) {
-        try {
-            return accessoriesService.getAccessoriesByAppellation(appellation);
-        } catch (AlreadyExistingException e) {
-            e.printStackTrace();
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        } catch (StorageException e) {
-            e.printStackTrace();
-        } catch (WrongDataTypeException e) {
-            e.printStackTrace();
-        }
-        return null;
+            @PathVariable(value = "appellation") String appellation) throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
+        return accessoriesService.getAccessoriesByAppellation(appellation);
     }
 
     @RequestMapping(value = {"/add"}, method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void add(@RequestBody AccessoriesRequest accessoriesRequest) {
-        try {
-            accessoriesService.createAccessories(new Accessories(accessoriesRequest.getAppellation(),
-                    accessoriesRequest.getBrand(), accessoriesRequest.getPrice()));
-        } catch (AlreadyExistingException e) {
-            e.printStackTrace();
-        } catch (StorageNotAvailableException e) {
-            e.printStackTrace();
-        } catch (StorageException e) {
-            e.printStackTrace();
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (NoNameException e) {
-            e.printStackTrace();
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        } catch (WrongDataTypeException e) {
-            e.printStackTrace();
-        } catch (NoAppellationException e) {
-            e.printStackTrace();
-        } catch (InvalidPriceException e) {
-            e.printStackTrace();
-        }
+    public void add(@RequestBody AccessoriesRequest accessoriesRequest) throws NoAppellationException, NoNameException, InvalidPriceException, ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
+        accessoriesService.createAccessories(new Accessories(accessoriesRequest.getAppellation(),
+                accessoriesRequest.getBrand(), accessoriesRequest.getPrice()));
+
     }
 
     @RequestMapping(value = "/updateaccessori", method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public boolean update(@RequestBody AccessoriesRequest accessoriesRequest) {
-        try {
-            return accessoriesService.updateAccessories(new Accessories(accessoriesRequest.getAppellation(),
-                    accessoriesRequest.getBrand(), accessoriesRequest.getPrice()));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (AlreadyExistingException e) {
-            e.printStackTrace();
-        } catch (StorageException e) {
-            e.printStackTrace();
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        } catch (NoAppellationException e) {
-            e.printStackTrace();
-        } catch (NoNameException e) {
-            e.printStackTrace();
-        } catch (InvalidPriceException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+    public boolean update(@RequestBody AccessoriesRequest accessoriesRequest) throws NoAppellationException, NoNameException, InvalidPriceException, ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
+        return accessoriesService.updateAccessories(new Accessories(accessoriesRequest.getAppellation(),
+                accessoriesRequest.getBrand(), accessoriesRequest.getPrice()));
     }
 
     @ResponseStatus(value = HttpStatus.I_AM_A_TEAPOT, reason = "Adatbázis hiba!")
-    @ExceptionHandler(StorageException.class)
+    @ExceptionHandler({StorageProblemException.class})
     public void dataBaseError() {
-
     }
 
-    @ExceptionHandler(PersistenceException.class)
+    @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE, reason = "Nem adtál meg minden adatot!")
+    @ExceptionHandler({NoAppellationException.class, NoNameException.class, InvalidPriceException.class, MissingArgumentException.class})
+    public void missingArgumentError() {
+    }
+
+    @ResponseStatus(value = HttpStatus.ALREADY_REPORTED, reason = "Már létező adat")
+    @ExceptionHandler({ExistingProblemException.class})
+    public void existingError() {
+    }
+
+    @ExceptionHandler({PersistenceException.class})
     public String errorOccurred() {
-        return "error";
+        return "Valami gond van :(";
     }
 }
