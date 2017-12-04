@@ -44,6 +44,7 @@ public class ShopController {
     @RequestMapping(value = {"/getshop/{location}"},
             method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Collection<Shop> listGlassesByBrand(@PathVariable(value = "location") String location) {
         try {

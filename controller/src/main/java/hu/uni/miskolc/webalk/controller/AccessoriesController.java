@@ -42,6 +42,7 @@ public class AccessoriesController {
     @RequestMapping(value = {"/getaccessories/{appellation}"},
             method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)
+
     @ResponseBody
     public Collection<Accessories> listAccessoriesByAppellation(
             @PathVariable(value = "appellation") String appellation) {
