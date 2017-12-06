@@ -12,16 +12,15 @@ import java.util.Collection;
 
 public class GlassesDAOsql implements GlassesDAO {
 
-    private String con;
+    private String con = "jdbc:sqlite:./database/glassShop.db";
     private Connection c;
     private Statement stmt;
 
     public GlassesDAOsql() {
-        con = ConnectionString.getConnectionString();
     }
 
     @Override
-    public void createGlasses(Glasses glasses) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public void createGlasses(Glasses glasses) throws AlreadyExistingException, StorageException, PersistenceException {
         String sql = "INSERT INTO Glasses (Brand, Model, Price, AvailableAt, Gender, Sunglasses) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             Class.forName("org.sqlite.JDBC");
@@ -39,23 +38,18 @@ public class GlassesDAOsql implements GlassesDAO {
 
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
                 throw new AlreadyExistingException();
-            } else {
-                throw new StorageException();
             }
-        } catch (Exception e) {
+            throw new StorageException();
+        } catch (ClassNotFoundException e) {
             throw new PersistenceException();
         }
     }
 
     @Override
-    public Collection<Glasses> getGlasses(String brand) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public Collection<Glasses> getGlasses(String brand) throws StorageException, PersistenceException {
         String model;
         float price;
         String availableAt;
@@ -81,10 +75,6 @@ public class GlassesDAOsql implements GlassesDAO {
             rs.close();
             stmt.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
         } catch (Exception e) {
@@ -94,11 +84,12 @@ public class GlassesDAOsql implements GlassesDAO {
     }
 
     @Override
-    public Glasses getGlasses(String brand, String model) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException, InvalidPriceException, NoGenderException, NoNameException, NoLocationSetException {
+    public Glasses getGlasses(String brand, String model) throws StorageException, PersistenceException, NoArgumentException {
         float price = 0;
         String availableAt = null;
         String gender = null;
         boolean sunglasses = false;
+        Glasses glasses = null;
         String sql = "SELECT * FROM Glasses WHERE  Brand = \'" + brand + "\' AND " + "Model = \'" + model + "\';";
         try {
             Class.forName("org.sqlite.JDBC");
@@ -113,18 +104,17 @@ public class GlassesDAOsql implements GlassesDAO {
                 gender = rs.getString("Gender");
                 sunglasses = rs.getInt("Sunglasses") > 0 ? true : false;
             }
+            glasses = new Glasses(brand, model, price, availableAt, gender, sunglasses);
             rs.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (InvalidPriceException | NoLocationSetException | NoGenderException | NoNameException e) {
+            throw new NoArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
-        return new Glasses(brand, model, price, availableAt, gender, sunglasses);
+        return glasses;
     }
 
     @Override
@@ -154,7 +144,7 @@ public class GlassesDAOsql implements GlassesDAO {
     }
 
     @Override
-    public boolean deleteGlasses(String brand, String model) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
+    public boolean deleteGlasses(String brand, String model) throws StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -168,16 +158,16 @@ public class GlassesDAOsql implements GlassesDAO {
             }
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (Exception e){
+            throw new PersistenceException();
         }
         return true;
     }
 
     @Override
-    public boolean deleteGlasses(Glasses glasses) throws ClassNotFoundException, StorageException, NotFoundException, AlreadyExistingException {
+    public boolean deleteGlasses(Glasses glasses) throws PersistenceException, StorageException {
         return deleteGlasses(glasses.getBrand(), glasses.getModel());
     }
 }

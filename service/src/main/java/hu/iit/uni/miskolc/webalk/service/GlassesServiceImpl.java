@@ -7,7 +7,10 @@ import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentExceptio
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistingException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageNotAvailableException;
 
 import java.util.Collection;
 
@@ -26,9 +29,7 @@ public class GlassesServiceImpl implements GlassesService {
             throw new StorageProblemException();
         } catch (AlreadyExistingException e) {
             throw new ExistingProblemException();
-        } catch (WrongFormatException e) {
-            throw new MissingArgumentException();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new PersistenceException();
         }
     }
@@ -40,8 +41,6 @@ public class GlassesServiceImpl implements GlassesService {
             throw new StorageProblemException();
         } catch (NotFoundException e) {
             throw new ExistingProblemException();
-        } catch (WrongFormatException e) {
-            throw new MissingArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
@@ -54,8 +53,6 @@ public class GlassesServiceImpl implements GlassesService {
             throw new StorageProblemException();
         } catch (NotFoundException e) {
             throw new ExistingProblemException();
-        } catch (WrongFormatException e) {
-            throw new MissingArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }

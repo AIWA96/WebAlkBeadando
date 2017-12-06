@@ -14,15 +14,14 @@ import java.util.List;
 
 public class ShopDAOsql implements ShopDAO {
 
-    private String con;
+    private String con = "jdbc:sqlite:./database/glassShop.db";
     private Connection c;
 
     public ShopDAOsql() {
-        con = ConnectionString.getConnectionString();
     }
 
     @Override
-    public void createShop(Shop shop) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public void createShop(Shop shop) throws AlreadyExistingException, StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -35,27 +34,23 @@ public class ShopDAOsql implements ShopDAO {
             ps.executeUpdate();
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
                 throw new AlreadyExistingException();
-            } else {
-                throw new StorageException();
             }
-        } catch (Exception e) {
+            throw new StorageException();
+        } catch (ClassNotFoundException e) {
             throw new PersistenceException();
         }
     }
 
     @Override
-    public Shop getShopByName(String name) throws NoEmployeeException, NoNameException, NoLocationException, AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public Shop getShopByName(String name) throws StorageException, PersistenceException, NoArgumentException {
         Collection<Employee> employees = new ArrayList<>();
         String shopLocation;
         String shopsql = "SELECT * FROM Shop WHERE Name = ?;";
         String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
+        Shop shop = null;
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -82,22 +77,21 @@ public class ShopDAOsql implements ShopDAO {
                 String post = rs1.getString("POST");
                 employees.add(new Employee(id, ename, gender, salary, post, name));
             }
+            shop = new Shop(name, shopLocation, employees);
             rs.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
+            throw new NoArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
-        return new Shop(name, shopLocation, employees);
+        return shop;
     }
 
     @Override
-    public Collection<Shop> getShopByLocation(String location) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public Collection<Shop> getShopByLocation(String location) throws StorageException, NoArgumentException, PersistenceException {
         List<String> shopNames = new ArrayList<>();
         ArrayList<Shop> shops = new ArrayList<>();
         String shopName;
@@ -135,12 +129,10 @@ public class ShopDAOsql implements ShopDAO {
             rs.close();
             ps.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
+            throw new NoArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
@@ -148,7 +140,7 @@ public class ShopDAOsql implements ShopDAO {
     }
 
     @Override
-    public Collection<Shop> getAllShops() throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public Collection<Shop> getAllShops() throws StorageException, NoArgumentException, PersistenceException {
         List<String> shopNames = new ArrayList<>();
         List<String> shopLocations = new ArrayList<>();
         ArrayList<Shop> shops = new ArrayList<>();
@@ -192,12 +184,10 @@ public class ShopDAOsql implements ShopDAO {
             rs.close();
             ps.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
+            throw new NoArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
@@ -205,7 +195,7 @@ public class ShopDAOsql implements ShopDAO {
     }
 
     @Override
-    public boolean updateShop(Shop shop) throws NotFoundException, StorageNotAvailableException, AlreadyExistingException, StorageException, ClassNotFoundException {
+    public boolean updateShop(Shop shop) throws AlreadyExistingException, StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -224,12 +214,14 @@ public class ShopDAOsql implements ShopDAO {
             throw new AlreadyExistingException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (Exception e) {
+            throw new PersistenceException();
         }
         return true;
     }
 
     @Override
-    public boolean deleteShop(String name) throws AlreadyExistingException, StorageException, StorageNotAvailableException, ClassNotFoundException, NotFoundException {
+    public boolean deleteShop(String name) throws StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -242,16 +234,16 @@ public class ShopDAOsql implements ShopDAO {
             }
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (Exception e){
+            throw new PersistenceException();
         }
         return true;
     }
 
     @Override
-    public boolean deleteShop(Shop shop) throws AlreadyExistingException, StorageNotAvailableException, StorageException, ClassNotFoundException, NotFoundException {
+    public boolean deleteShop(Shop shop) throws PersistenceException, StorageException {
         return deleteShop(shop.getName());
     }
 }

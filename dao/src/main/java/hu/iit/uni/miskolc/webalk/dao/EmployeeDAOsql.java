@@ -1,10 +1,16 @@
 package hu.iit.uni.miskolc.webalk.dao;
 
-import hu.iit.uni.miskolc.webalk.core.exceptions.*;
+import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidSalaryException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
+import hu.iit.uni.miskolc.webalk.core.exceptions.NoPostException;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.EmployeeDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistingException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NoArgumentException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,16 +18,15 @@ import java.util.Collection;
 
 public class EmployeeDAOsql implements EmployeeDAO {
 
-    private String con;
+    private String con = "jdbc:sqlite:./database/glassShop.db";
     private Connection c;
     private Statement stmt;
 
     public EmployeeDAOsql() {
-        con = ConnectionString.getConnectionString();
     }
 
     @Override
-    public void createEmployee(Employee employee) throws AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public void createEmployee(Employee employee) throws AlreadyExistingException, StorageException, PersistenceException {
         String sql = "INSERT INTO Employee (IDNUM, NAME, GENDER, SALARY, POST, ShopName) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             Class.forName("org.sqlite.JDBC");
@@ -38,28 +43,24 @@ public class EmployeeDAOsql implements EmployeeDAO {
 
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
                 throw new AlreadyExistingException();
-            } else {
-                throw new StorageException();
             }
-        } catch (Exception e) {
+            throw new StorageException();
+        } catch (ClassNotFoundException e) {
             throw new PersistenceException();
         }
     }
 
     @Override
-    public Employee getEmployee(int id) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException, AlreadyExistingException, WrongDataTypeException, StorageException, PersistenceException {
+    public Employee getEmployee(int id) throws StorageException, PersistenceException, NoArgumentException {
         String ename = null;
         String gender = null;
         float salary = 0;
         String post = null;
         String shopName = null;
+        Employee employee;
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -75,23 +76,22 @@ public class EmployeeDAOsql implements EmployeeDAO {
                 post = rs.getString("POST");
                 shopName = rs.getString("ShopName");
             }
+            employee = new Employee(id, ename, gender, salary, post, shopName);
             rs.close();
             stmt.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (NoNameException | NoPostException | InvalidSalaryException | NoGenderException e) {
+            throw new NoArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
-        return new Employee(id, ename, gender, salary, post, shopName);
+        return employee;
     }
 
     @Override
-    public Collection<Employee> getAllEmployee() throws WrongDataTypeException, NoPostException, NoGenderException, StorageException, NoNameException, PersistenceException, AlreadyExistingException, InvalidSalaryException {
+    public Collection<Employee> getAllEmployee() throws StorageException, PersistenceException, NoArgumentException {
         int id;
         String name;
         String gender;
@@ -117,12 +117,10 @@ public class EmployeeDAOsql implements EmployeeDAO {
             }
             rs.close();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
-        } catch (SQLDataException e) {
-            throw new WrongDataTypeException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (NoNameException | NoPostException | InvalidSalaryException | NoGenderException e) {
+            throw new NoArgumentException();
         } catch (Exception e) {
             throw new PersistenceException();
         }
@@ -130,7 +128,7 @@ public class EmployeeDAOsql implements EmployeeDAO {
     }
 
     @Override
-    public boolean updateEmployee(Employee employee) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
+    public boolean updateEmployee(Employee employee) throws AlreadyExistingException, StorageException, PersistenceException {
         String sql = "UPDATE Employee SET SALARY = ?, POST = ? WHERE ShopName = ?";
         try {
             Class.forName("org.sqlite.JDBC");
@@ -149,12 +147,14 @@ public class EmployeeDAOsql implements EmployeeDAO {
             throw new AlreadyExistingException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (Exception e) {
+            throw new PersistenceException();
         }
         return true;
     }
 
     @Override
-    public boolean deleteEmployee(int id) throws ClassNotFoundException, NotFoundException, AlreadyExistingException, StorageException {
+    public boolean deleteEmployee(int id) throws StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -167,16 +167,16 @@ public class EmployeeDAOsql implements EmployeeDAO {
             }
             c.commit();
             c.close();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
         } catch (SQLException e) {
             throw new StorageException();
+        } catch (Exception e) {
+            throw new PersistenceException();
         }
         return true;
     }
 
     @Override
-    public boolean deleteEmployee(Employee employee) throws ClassNotFoundException, AlreadyExistingException, StorageException, NotFoundException {
+    public boolean deleteEmployee(Employee employee) throws PersistenceException, StorageException {
         return deleteEmployee(employee.getIdNum());
     }
 }
