@@ -33,7 +33,8 @@ public class GlassesController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Collection<Glasses> listGlassesByBrand(@PathVariable(value = "brand") String brand) throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
-        return glassesService.getGlasses(brand);
+        Collection<Glasses> glassesCollection = glassesService.getGlasses(brand);
+        return glassesCollection;
     }
 
 

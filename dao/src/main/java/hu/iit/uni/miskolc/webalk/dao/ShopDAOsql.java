@@ -183,7 +183,7 @@ public class ShopDAOsql implements ShopDAO {
                 if (employees.isEmpty()) {
                     continue;
                 }
-                shops.add(new Shop(shopNames.get(i), shopLocation, employees));
+                shops.add(new Shop(shopNames.get(i), shopLocations.get(i), employees));
             }
             rs.close();
             ps.close();

@@ -63,7 +63,7 @@ public class GlassesDAOsql implements GlassesDAO {
         String gender;
         boolean sunglasses;
         ArrayList<Glasses> glasses = new ArrayList<>();
-        String sql = "SELECT * FROM Glasses WHERE  Brand = \'" + brand + "\';";
+        String sql = "SELECT * FROM Glasses WHERE  Brand = " + brand + ";";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);

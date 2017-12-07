@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class DataBase {
 
-    private static String con = "jdbc:sqlite:./database/glassShop.db";
+    private static final String con = "jdbc:sqlite:./database/glassShop.db";
 
     public DataBase() throws CreateDataBaseException {
         createDataBase();
@@ -59,7 +59,7 @@ public class DataBase {
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
 
-            sql = "INSERT INTO `Shop` (NAME,LOCATION) VALUES ('Optiris','Tiszaújváros'),\n" +
+            sql = "INSERT INTO `Shop` (NAME,LOCATION) VALUES ('Optiris','Tiszaujvaros'),\n" +
                     " ('Trend Optika','Miskolc');";
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
