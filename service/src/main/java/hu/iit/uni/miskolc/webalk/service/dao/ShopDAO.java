@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface ShopDAO {
 
-    void createShop(Shop shop) throws StorageNotAvailableException, StorageException, AlreadyExistingException, PersistenceException;
+    void createShop(Shop shop) throws StorageNotAvailableException, StorageException, AlreadyExistException, PersistenceException;
 
     Shop getShopByName(String name) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException, NoArgumentException;
 
@@ -16,7 +16,7 @@ public interface ShopDAO {
 
     Collection<Shop> getAllShops() throws StorageNotAvailableException, StorageException, NotFoundException, NoArgumentException, PersistenceException;
 
-    boolean updateShop(Shop shop) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistingException, PersistenceException;
+    boolean updateShop(Shop shop) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistException, PersistenceException;
 
     boolean deleteShop(String name) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;
 

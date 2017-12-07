@@ -5,7 +5,10 @@ import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.model.Shop;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.ShopDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NoArgumentException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,14 +17,15 @@ import java.util.List;
 
 public class ShopDAOsql implements ShopDAO {
 
-    private String con = "jdbc:sqlite:./database/glassShop.db";
+    private String con;
     private Connection c;
 
     public ShopDAOsql() {
+        con = DataBase.getCon();
     }
 
     @Override
-    public void createShop(Shop shop) throws AlreadyExistingException, StorageException, PersistenceException {
+    public void createShop(Shop shop) throws AlreadyExistException, StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -36,7 +40,7 @@ public class ShopDAOsql implements ShopDAO {
             c.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistingException();
+                throw new AlreadyExistException();
             }
             throw new StorageException();
         } catch (ClassNotFoundException e) {
@@ -195,7 +199,7 @@ public class ShopDAOsql implements ShopDAO {
     }
 
     @Override
-    public boolean updateShop(Shop shop) throws AlreadyExistingException, StorageException, PersistenceException {
+    public boolean updateShop(Shop shop) throws AlreadyExistException, StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
@@ -211,7 +215,7 @@ public class ShopDAOsql implements ShopDAO {
             ps.close();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
+            throw new AlreadyExistException();
         } catch (SQLException e) {
             throw new StorageException();
         } catch (Exception e) {
@@ -236,7 +240,7 @@ public class ShopDAOsql implements ShopDAO {
             c.close();
         } catch (SQLException e) {
             throw new StorageException();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new PersistenceException();
         }
         return true;

@@ -7,7 +7,7 @@ import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentExceptio
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistingException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageNotAvailableException;
@@ -27,7 +27,7 @@ public class GlassesServiceImpl implements GlassesService {
             glassesDAO.createGlasses(glasses);
         } catch (StorageNotAvailableException | StorageException e) {
             throw new StorageProblemException();
-        } catch (AlreadyExistingException e) {
+        } catch (AlreadyExistException e) {
             throw new ExistingProblemException();
         } catch (Exception e) {
             throw new PersistenceException();
@@ -63,7 +63,7 @@ public class GlassesServiceImpl implements GlassesService {
             return glassesDAO.updateGlasses(glasses);
         } catch (StorageNotAvailableException | StorageException e) {
             throw new StorageProblemException();
-        } catch (NotFoundException | AlreadyExistingException e) {
+        } catch (NotFoundException | AlreadyExistException e) {
             throw new ExistingProblemException();
         } catch (Exception e) {
             throw new PersistenceException();

@@ -8,13 +8,13 @@ import java.util.Collection;
 
 public interface GlassesDAO {
 
-    void createGlasses(Glasses glasses) throws StorageNotAvailableException, StorageException, AlreadyExistingException, PersistenceException;
+    void createGlasses(Glasses glasses) throws StorageNotAvailableException, StorageException, AlreadyExistException, PersistenceException;
 
     Collection<Glasses> getGlasses(String brand) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;
 
     Glasses getGlasses(String brand, String model) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException, NoArgumentException;
 
-    boolean updateGlasses(Glasses glasses) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistingException, PersistenceException;
+    boolean updateGlasses(Glasses glasses) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistException, PersistenceException;
 
     boolean deleteGlasses(String brand, String model) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;
 

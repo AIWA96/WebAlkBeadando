@@ -8,13 +8,13 @@ import java.util.Collection;
 
 public interface EmployeeDAO {
 
-    void createEmployee(Employee employee) throws StorageNotAvailableException, StorageException, AlreadyExistingException, PersistenceException;
+    void createEmployee(Employee employee) throws StorageNotAvailableException, StorageException, AlreadyExistException, PersistenceException;
 
     Employee getEmployee(int id) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException, NoArgumentException;
 
     Collection<Employee> getAllEmployee() throws StorageNotAvailableException, StorageException, NotFoundException, NoArgumentException, PersistenceException;
 
-    boolean updateEmployee(Employee employee) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistingException, PersistenceException;
+    boolean updateEmployee(Employee employee) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistException, PersistenceException;
 
     boolean deleteEmployee(int id) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;
 

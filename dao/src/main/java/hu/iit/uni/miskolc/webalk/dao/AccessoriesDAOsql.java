@@ -3,7 +3,8 @@ package hu.iit.uni.miskolc.webalk.dao;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistingException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
 
@@ -13,15 +14,18 @@ import java.util.Collection;
 
 public class AccessoriesDAOsql implements AccessoriesDAO {
 
-    private String con = "jdbc:sqlite:./database/glassShop.db";
+    private DataBase dataBase;
+    private String con;
     private Connection conn;
     private Statement stmt;
 
-    public AccessoriesDAOsql() {
+    public AccessoriesDAOsql() throws CreateDataBaseException {
+        dataBase = new DataBase();
+        con = dataBase.getCon();
     }
 
     @Override
-    public void createAccessories(Accessories accessories) throws PersistenceException, AlreadyExistingException, StorageException {
+    public void createAccessories(Accessories accessories) throws PersistenceException, AlreadyExistException, StorageException {
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
@@ -39,7 +43,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistingException();
+                throw new AlreadyExistException();
             }
             throw new StorageException();
         } catch (ClassNotFoundException e) {
@@ -105,7 +109,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     }
 
     @Override
-    public Collection<Accessories> getAllAccessories() throws AlreadyExistingException, StorageException, PersistenceException {
+    public Collection<Accessories> getAllAccessories() throws AlreadyExistException, StorageException, PersistenceException {
         String appellation;
         String brand;
         float price;
@@ -128,7 +132,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistingException();
+                throw new AlreadyExistException();
             }
             throw new StorageException();
         } catch (Exception e) {
@@ -138,7 +142,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     }
 
     @Override
-    public boolean updateAccessories(Accessories accessories) throws AlreadyExistingException, StorageException, PersistenceException {
+    public boolean updateAccessories(Accessories accessories) throws AlreadyExistException, StorageException, PersistenceException {
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
@@ -154,7 +158,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.commit();
             conn.close();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistingException();
+            throw new AlreadyExistException();
         } catch (SQLException e) {
             throw new StorageException();
         } catch (Exception e) {
@@ -180,7 +184,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.close();
         } catch (SQLException e) {
             throw new StorageException();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new PersistenceException();
         }
         return true;
