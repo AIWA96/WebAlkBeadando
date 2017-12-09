@@ -58,6 +58,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    public Collection<Employee> getEmployeeByShopName(String shopName) throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException {
+        try {
+            return employeeDAO.getEmployeeByShopName(shopName);
+        } catch (StorageNotAvailableException | StorageException e) {
+            throw new StorageProblemException();
+        } catch (NotFoundException e) {
+            throw new ExistingProblemException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
+    }
+
     public boolean updateEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return employeeDAO.updateEmployee(employee);

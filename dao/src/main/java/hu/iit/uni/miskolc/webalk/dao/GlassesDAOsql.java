@@ -40,18 +40,18 @@ public class GlassesDAOsql implements GlassesDAO {
             ps.setFloat(3, glasses.getPrice());
             ps.setString(4, glasses.getAvailableAt());
             ps.setString(5, glasses.getGender());
-            ps.setInt(6, glasses.isSunglasses() ? 1 : 0);
+            ps.setInt(6, glasses.isSunglasses() ? 0 : 1);
             ps.executeUpdate();
 
             c.commit();
             c.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistException();
+                throw new AlreadyExistException(e);
             }
             throw new StorageException();
         } catch (ClassNotFoundException e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -83,9 +83,9 @@ public class GlassesDAOsql implements GlassesDAO {
             stmt.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return glasses;
     }
@@ -115,11 +115,11 @@ public class GlassesDAOsql implements GlassesDAO {
             rs.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (InvalidPriceException | NoLocationSetException | NoGenderException | NoNameException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return glasses;
     }
@@ -141,11 +141,11 @@ public class GlassesDAOsql implements GlassesDAO {
             c.commit();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistException();
+            throw new AlreadyExistException(e);
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }
@@ -166,9 +166,9 @@ public class GlassesDAOsql implements GlassesDAO {
             c.commit();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }

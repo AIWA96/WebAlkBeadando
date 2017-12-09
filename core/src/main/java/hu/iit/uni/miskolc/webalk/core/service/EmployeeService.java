@@ -16,6 +16,8 @@ public interface EmployeeService {
 
     Collection<Employee> getAllEmployee() throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException;
 
+    Collection<Employee> getEmployeeByShopName(String shopName) throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException;
+
     boolean updateEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
     boolean deleteEmployee(int idNum) throws StorageProblemException, ExistingProblemException, PersistenceException;

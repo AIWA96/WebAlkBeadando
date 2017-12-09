@@ -26,11 +26,11 @@ public class GlassesServiceImpl implements GlassesService {
         try {
             glassesDAO.createGlasses(glasses);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (AlreadyExistException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -38,11 +38,11 @@ public class GlassesServiceImpl implements GlassesService {
         try {
             return glassesDAO.getGlasses(brand);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -50,11 +50,11 @@ public class GlassesServiceImpl implements GlassesService {
         try {
             return glassesDAO.getGlasses(brand, model);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -70,15 +70,15 @@ public class GlassesServiceImpl implements GlassesService {
         }
     }
 
-    public boolean deleteGlassess(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException {
+    public boolean deleteGlasses(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return glassesDAO.deleteGlasses(glasses);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -86,11 +86,11 @@ public class GlassesServiceImpl implements GlassesService {
         try {
             return glassesDAO.deleteGlasses(brand, model);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 }

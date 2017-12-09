@@ -58,7 +58,6 @@ public class ShopServiceImpl implements ShopService {
         }
     }
 
-    @Override
     public Collection<Shop> getAllShops() throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException {
         try {
             return shopDAO.getAllShops();

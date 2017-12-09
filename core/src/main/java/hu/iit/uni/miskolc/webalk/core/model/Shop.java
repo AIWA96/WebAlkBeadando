@@ -52,7 +52,7 @@ public class Shop {
     }
 
     public void setLocation(String location) throws NoLocationException {
-        if (location == null) {
+        if (location == null || location == "") {
             throw new NoLocationException("A shop must have a location!");
         }
         this.location = location;

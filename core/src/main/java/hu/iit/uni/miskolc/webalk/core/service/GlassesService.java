@@ -18,7 +18,7 @@ public interface GlassesService {
 
     boolean updateGlasses(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
-    boolean deleteGlassess(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException;
+    boolean deleteGlasses(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException;
 
     boolean deleteGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, PersistenceException;
 }

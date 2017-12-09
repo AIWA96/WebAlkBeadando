@@ -2,6 +2,7 @@ package hu.iit.uni.miskolc.webalk.dao;
 
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,15 +21,22 @@ public class DataBase {
     }
 
     public void createDataBase() throws CreateDataBaseException {
+        File f = new File("./database/glassShop.db");
+        if (f.exists() && !f.isDirectory()) {
+            return;
+        }
+
+
         String sql = "CREATE TABLE IF NOT EXISTS `Shop` (\n" +
                 "\t`NAME`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\t`LOCATION`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\tPRIMARY KEY(`NAME`));";
-        Connection c;
+        Connection c = null;
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
+
             PreparedStatement ps = c.prepareStatement(sql);
             ps.executeUpdate();
             sql = "CREATE TABLE IF NOT EXISTS `Employee` (\n" +
@@ -64,10 +72,10 @@ public class DataBase {
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
 
-            sql = "INSERT INTO `Employee` (IDNUM,NAME,GENDER,SALARY,POST,ShopName) VALUES (1,'Horvát Rozi','FEMALE',100000.0,'Optician','Optiris'),\n" +
+            sql = "INSERT INTO `Employee` (IDNUM,NAME,GENDER,SALARY,POST,ShopName) VALUES (1,'Horvat Rozi','FEMALE',100000.0,'Optician','Optiris'),\n" +
                     " (2,'Kubuk Matyi','MALE',135000.0,'Mechanist','Trend Optika'),\n" +
                     " (3,'Teszt Elek','MALE',90000.0,'Seller','Trend Optika'),\n" +
-                    " (4,'Asd Asd','FEMALE',85000.0,'Optician','Optiris');";
+                    " (4,'Mester Eszter','FEMALE',85000.0,'Optician','Optiris');";
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
 
@@ -78,19 +86,22 @@ public class DataBase {
             ps.executeUpdate();
 
             sql = "INSERT INTO `Accessories` (Appellation,Brand,Price) VALUES ('Tok','Oakley',1000.0),\n" +
-                    " ('Törlőkendő','Hoya',800.0),\n" +
-                    " ('Orr papucs','Optiris',200.0);";
+                    " ('Torlokendo','Hoya',800.0),\n" +
+                    " ('Tok','Optiris',200.0);";
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
-
             c.commit();
             c.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-            }else {
+                /*try {
+                    c.close();
+                } catch (SQLException ex) {
+                }*/
+            } else {
                 throw new CreateDataBaseException();
             }
-        } catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             throw new CreateDataBaseException(e.getCause());
         }
     }

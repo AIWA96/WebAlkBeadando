@@ -37,7 +37,6 @@ public class GlassesController {
         return glassesCollection;
     }
 
-
     @RequestMapping(value = {"/getglass/{brand, model}"},
             method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)

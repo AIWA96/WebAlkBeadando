@@ -129,6 +129,42 @@ public class EmployeeDAOsql implements EmployeeDAO {
     }
 
     @Override
+    public Collection<Employee> getEmployeeByShopName(String shopName) throws StorageException, NoArgumentException, PersistenceException {
+        int id;
+        String name;
+        String gender;
+        String post;
+        float salary;
+        Collection<Employee> employees = new ArrayList<>();
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection(con);
+
+            String sql = "SELECT * FROM Employee WHERE ShopName = ?";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1, shopName);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("IDNUM");
+                name = rs.getString("Name");
+                gender = rs.getString("Gender");
+                post = rs.getString("Post");
+                salary = rs.getFloat("Salary");
+                employees.add(new Employee(id, name, gender, salary, post, shopName));
+            }
+            rs.close();
+            c.close();
+        } catch (SQLException e) {
+            throw new StorageException();
+        } catch (NoNameException | NoPostException | InvalidSalaryException | NoGenderException e) {
+            throw new NoArgumentException();
+        } catch (Exception e) {
+            throw new PersistenceException();
+        }
+        return employees;
+    }
+
+    @Override
     public boolean updateEmployee(Employee employee) throws AlreadyExistException, StorageException, PersistenceException {
         String sql = "UPDATE Employee SET SALARY = ?, POST = ? WHERE ShopName = ?";
         try {

@@ -14,6 +14,8 @@ public interface EmployeeDAO {
 
     Collection<Employee> getAllEmployee() throws StorageNotAvailableException, StorageException, NotFoundException, NoArgumentException, PersistenceException;
 
+    Collection<Employee> getEmployeeByShopName(String shopName) throws StorageNotAvailableException, StorageException, NotFoundException, NoArgumentException, PersistenceException;
+
     boolean updateEmployee(Employee employee) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistException, PersistenceException;
 
     boolean deleteEmployee(int id) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;

@@ -5,16 +5,20 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.NoEmployeeException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoLocationException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 import hu.iit.uni.miskolc.webalk.core.model.Shop;
+import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
 import hu.iit.uni.miskolc.webalk.core.service.ShopService;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
+import hu.iit.uni.miskolc.webalk.dao.EmployeeDAOsql;
+import hu.iit.uni.miskolc.webalk.service.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RequestMapping("/shop")
@@ -55,8 +59,12 @@ public class ShopController {
     @RequestMapping(value = "/updateshop", method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public boolean update(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, StorageProblemException, ExistingProblemException, PersistenceException {
-        Collection collection = shopRequest.getEmployees();
+    public boolean update(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, StorageProblemException, ExistingProblemException, PersistenceException, MissingArgumentException {
+        Collection collection = new ArrayList<>();
+
+        EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOsql());
+        collection.add(employeeService.getEmployeeByShopName(shopRequest.getShopName()));
+        
         return shopService.updateShop(new Shop(shopRequest.getShopName(), shopRequest.getLocation(), collection));
     }
 
