@@ -49,7 +49,7 @@ public class GlassesDAOsql implements GlassesDAO {
             if (e.getErrorCode() == 19) {
                 throw new AlreadyExistException(e);
             }
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (ClassNotFoundException e) {
             throw new PersistenceException(e);
         }

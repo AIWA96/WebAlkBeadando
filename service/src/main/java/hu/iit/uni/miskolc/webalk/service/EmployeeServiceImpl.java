@@ -3,7 +3,6 @@ package hu.iit.uni.miskolc.webalk.service;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
-import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.EmployeeDAO;
@@ -22,51 +21,51 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeDAO = employeeDAO;
     }
 
-    public void createEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public void createEmployee(Employee employee) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             employeeDAO.createEmployee(employee);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (AlreadyExistException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public Employee getEmployee(int idNum) throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException {
+    public Employee getEmployee(int idNum) throws PersistenceException, ExistingProblemException, StorageProblemException {
         try {
             return employeeDAO.getEmployee(idNum);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public Collection<Employee> getAllEmployee() throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException {
+    public Collection<Employee> getAllEmployee() throws PersistenceException, ExistingProblemException, StorageProblemException {
         try {
             return employeeDAO.getAllEmployee();
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public Collection<Employee> getEmployeeByShopName(String shopName) throws PersistenceException, MissingArgumentException, ExistingProblemException, StorageProblemException {
+    public Collection<Employee> getEmployeeByShopName(String shopName) throws PersistenceException, ExistingProblemException, StorageProblemException {
         try {
             return employeeDAO.getEmployeeByShopName(shopName);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -74,11 +73,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             return employeeDAO.updateEmployee(employee);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException | AlreadyExistException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -86,11 +85,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             return employeeDAO.deleteEmployee(idNum);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -98,11 +97,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             return employeeDAO.deleteEmployee(employee);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 }

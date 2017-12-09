@@ -3,7 +3,6 @@ package hu.iit.uni.miskolc.webalk.service;
 import hu.iit.uni.miskolc.webalk.core.model.Accessories;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
-import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.AccessoriesDAO;
@@ -22,63 +21,63 @@ public class AccessoriesServiceImpl implements AccessoriesService {
         this.accessoriesDAO = accessoriesDAO;
     }
 
-    public void createAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public void createAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             accessoriesDAO.createAccessories(accessories);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (AlreadyExistException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public Collection<Accessories> getAccessoriesByAppellation(String appellation) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public Collection<Accessories> getAccessoriesByAppellation(String appellation) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return accessoriesDAO.getAccessoriesByAppellation(appellation);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public Collection<Accessories> getAccessoriesByBrand(String brand) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public Collection<Accessories> getAccessoriesByBrand(String brand) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return accessoriesDAO.getAccessoriesByBrand(brand);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public Collection<Accessories> getAllAccessories() throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public Collection<Accessories> getAllAccessories() throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return accessoriesDAO.getAllAccessories();
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
-    public boolean updateAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public boolean updateAccessories(Accessories accessories) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return accessoriesDAO.updateAccessories(accessories);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException | AlreadyExistException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -86,11 +85,11 @@ public class AccessoriesServiceImpl implements AccessoriesService {
         try {
             return accessoriesDAO.deleteAccessories(accessories);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -98,11 +97,11 @@ public class AccessoriesServiceImpl implements AccessoriesService {
         try {
             return accessoriesDAO.deleteAccessoriesByBrand(brand);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 }

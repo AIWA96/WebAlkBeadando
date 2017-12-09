@@ -3,7 +3,6 @@ package hu.iit.uni.miskolc.webalk.service;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
 import hu.iit.uni.miskolc.webalk.core.service.GlassesService;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemException;
-import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
@@ -22,7 +21,7 @@ public class GlassesServiceImpl implements GlassesService {
         this.glassesDAO = glassesDAO;
     }
 
-    public void createGlass(Glasses glasses) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public void createGlass(Glasses glasses) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             glassesDAO.createGlasses(glasses);
         } catch (StorageNotAvailableException | StorageException e) {
@@ -34,7 +33,7 @@ public class GlassesServiceImpl implements GlassesService {
         }
     }
 
-    public Collection<Glasses> getGlasses(String brand) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public Collection<Glasses> getGlasses(String brand) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return glassesDAO.getGlasses(brand);
         } catch (StorageNotAvailableException | StorageException e) {
@@ -46,7 +45,7 @@ public class GlassesServiceImpl implements GlassesService {
         }
     }
 
-    public Glasses getGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, MissingArgumentException, PersistenceException {
+    public Glasses getGlasses(String brand, String model) throws StorageProblemException, ExistingProblemException, PersistenceException {
         try {
             return glassesDAO.getGlasses(brand, model);
         } catch (StorageNotAvailableException | StorageException e) {
@@ -62,11 +61,11 @@ public class GlassesServiceImpl implements GlassesService {
         try {
             return glassesDAO.updateGlasses(glasses);
         } catch (StorageNotAvailableException | StorageException e) {
-            throw new StorageProblemException();
+            throw new StorageProblemException(e);
         } catch (NotFoundException | AlreadyExistException e) {
-            throw new ExistingProblemException();
+            throw new ExistingProblemException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 

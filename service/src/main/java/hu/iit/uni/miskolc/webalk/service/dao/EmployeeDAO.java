@@ -18,6 +18,8 @@ public interface EmployeeDAO {
 
     boolean updateEmployee(Employee employee) throws StorageNotAvailableException, StorageException, NotFoundException, AlreadyExistException, PersistenceException;
 
+    boolean updateEmployeeWorkPlaceName(String shopName, String oldName) throws AlreadyExistException, StorageException, PersistenceException;
+
     boolean deleteEmployee(int id) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;
 
     boolean deleteEmployee(Employee employee) throws StorageNotAvailableException, StorageException, NotFoundException, PersistenceException;

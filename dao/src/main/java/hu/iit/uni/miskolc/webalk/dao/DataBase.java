@@ -93,16 +93,9 @@ public class DataBase {
             c.commit();
             c.close();
         } catch (SQLException e) {
-            if (e.getErrorCode() == 19) {
-                /*try {
-                    c.close();
-                } catch (SQLException ex) {
-                }*/
-            } else {
-                throw new CreateDataBaseException();
-            }
+            throw new CreateDataBaseException(e);
         } catch (ClassNotFoundException e) {
-            throw new CreateDataBaseException(e.getCause());
+            throw new CreateDataBaseException(e);
         }
     }
 }

@@ -64,7 +64,7 @@ public class ShopController {
 
         EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOsql());
         collection.add(employeeService.getEmployeeByShopName(shopRequest.getShopName()));
-        
+
         return shopService.updateShop(new Shop(shopRequest.getShopName(), shopRequest.getLocation(), collection));
     }
 

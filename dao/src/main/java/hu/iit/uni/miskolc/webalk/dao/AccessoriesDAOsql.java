@@ -21,7 +21,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
 
     public AccessoriesDAOsql() throws CreateDataBaseException {
         dataBase = new DataBase();
-        con = dataBase.getCon();
+        con = DataBase.getCon();
     }
 
     @Override
@@ -43,11 +43,11 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistException();
+                throw new AlreadyExistException(e);
             }
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (ClassNotFoundException e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -72,9 +72,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             rs.close();
             conn.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return accessories;
     }
@@ -101,9 +101,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             stmt.close();
             conn.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return accessories;
     }
@@ -132,11 +132,11 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistException();
+                throw new AlreadyExistException(e);
             }
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return accessories;
     }
@@ -158,11 +158,11 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.commit();
             conn.close();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistException();
+            throw new AlreadyExistException(e);
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }
@@ -183,15 +183,15 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.commit();
             conn.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }
 
     @Override
-    public boolean deleteAccessoriesByBrand(String brand) throws NotFoundException, StorageException, PersistenceException {
+    public boolean deleteAccessoriesByBrand(String brand) throws StorageException, PersistenceException {
         String sql = "DELETE FROM Accessories WHERE Brand = ?";
         try {
             Class.forName("org.sqlite.JDBC");
@@ -205,9 +205,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             conn.commit();
             conn.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }

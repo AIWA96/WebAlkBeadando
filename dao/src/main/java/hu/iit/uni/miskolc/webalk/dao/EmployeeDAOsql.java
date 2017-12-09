@@ -46,11 +46,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
             c.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistException();
+                throw new AlreadyExistException(e);
             }
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (ClassNotFoundException e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -82,11 +82,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
             stmt.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (NoNameException | NoPostException | InvalidSalaryException | NoGenderException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return employee;
     }
@@ -119,11 +119,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
             rs.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (NoNameException | NoPostException | InvalidSalaryException | NoGenderException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return employees;
     }
@@ -155,11 +155,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
             rs.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (NoNameException | NoPostException | InvalidSalaryException | NoGenderException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return employees;
     }
@@ -181,11 +181,36 @@ public class EmployeeDAOsql implements EmployeeDAO {
             c.commit();
             c.close();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistException();
+            throw new AlreadyExistException(e);
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateEmployeeWorkPlaceName(String shopName, String oldName) throws AlreadyExistException, StorageException, PersistenceException {
+        String update = "UPDATE Employee SET ShopName = ? WHERE ShopName = ?";
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection(con);
+            c.setAutoCommit(false);
+            PreparedStatement ps = c.prepareStatement(update);
+            ps.setString(1, shopName);
+            ps.setString(2, oldName);
+            if (ps.executeUpdate() == 0) {
+                throw new NotFoundException();
+            }
+            c.commit();
+            c.close();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new AlreadyExistException(e);
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        } catch (Exception e) {
+            throw new PersistenceException(e);
         }
         return true;
     }
@@ -205,9 +230,9 @@ public class EmployeeDAOsql implements EmployeeDAO {
             c.commit();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }

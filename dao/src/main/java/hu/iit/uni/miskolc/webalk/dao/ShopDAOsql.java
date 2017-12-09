@@ -4,6 +4,7 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.*;
 import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.model.Shop;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
+import hu.iit.uni.miskolc.webalk.service.dao.EmployeeDAO;
 import hu.iit.uni.miskolc.webalk.service.dao.ShopDAO;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NoArgumentException;
@@ -40,11 +41,11 @@ public class ShopDAOsql implements ShopDAO {
             c.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
-                throw new AlreadyExistException();
+                throw new AlreadyExistException(e);
             }
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (ClassNotFoundException e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
     }
 
@@ -85,11 +86,11 @@ public class ShopDAOsql implements ShopDAO {
             rs.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return shop;
     }
@@ -134,11 +135,11 @@ public class ShopDAOsql implements ShopDAO {
             ps.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return shops;
     }
@@ -149,7 +150,7 @@ public class ShopDAOsql implements ShopDAO {
         List<String> shopLocations = new ArrayList<>();
         ArrayList<Shop> shops = new ArrayList<>();
         String shopName;
-        String shopLocation = null;
+        String shopLocation;
         String shopsql = "SELECT * FROM Shop;";
         String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
@@ -189,37 +190,52 @@ public class ShopDAOsql implements ShopDAO {
             ps.close();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
-            throw new NoArgumentException();
+            throw new NoArgumentException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return shops;
     }
 
     @Override
     public boolean updateShop(Shop shop) throws AlreadyExistException, StorageException, PersistenceException {
+        String select = "SELECT NAME FROM Shop WHERE LOCATION = ?;";
+        String sql = "UPDATE Shop SET NAME = ? WHERE LOCATION = ?";
+        String oldName = null;
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
-            String sql = "UPDATE Shop SET NAME = ? WHERE LOCATION = ?";
-            PreparedStatement ps = c.prepareStatement(sql);
-            ps.setString(1, shop.getName());
-            ps.setString(2, shop.getLocation());
+
+            PreparedStatement ps = c.prepareStatement(select);
+            ps.setString(1, shop.getLocation());
             if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
+
+            ps = c.prepareStatement(sql);
+            ps.setString(1, shop.getName());
+            ps.setString(2, shop.getLocation());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                oldName = rs.getString("NAME");
+            }
+
             c.commit();
             ps.close();
             c.close();
+            EmployeeDAO employeeDAO = new EmployeeDAOsql();
+            if (!employeeDAO.updateEmployeeWorkPlaceName(shop.getName(), oldName)) {
+                throw new PersistenceException("Failure!");
+            }
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new AlreadyExistException();
+            throw new AlreadyExistException(e);
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }
@@ -239,9 +255,9 @@ public class ShopDAOsql implements ShopDAO {
             c.commit();
             c.close();
         } catch (SQLException e) {
-            throw new StorageException();
+            throw new StorageException(e);
         } catch (Exception e) {
-            throw new PersistenceException();
+            throw new PersistenceException(e);
         }
         return true;
     }
