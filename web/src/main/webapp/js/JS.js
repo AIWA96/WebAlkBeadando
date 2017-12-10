@@ -50,14 +50,15 @@ $(document).ready(function () {
 jQuery(function () {
     readJSON = function () {
         $.ajax({
-                url: "/css/probaJSON",
+                url: "/js/probaJSON",
                 type: "GET",
                 dataType: "JSON",
                 context: this,
                 success: function (data) {
 
                     $("#content").empty();
-                    var innertable = $("<div class='mid'><table style= 'border:solid'> </table> </div>").attr('id', 'innertable');
+                    var innertable = $("<div class='mid'><table style= 'border:solid'> </table> </div>"+
+                        "<br><br><br><br><br><br><br><br><br>").attr('id', 'innertable');
                     innertable.append("<tr><th>IdNum</th><th>Name</th><th>Gender</th><th>Salary</th>"
                         + "<th>Post</th><th>ShopName</th></tr>");
                     for (i in data) {

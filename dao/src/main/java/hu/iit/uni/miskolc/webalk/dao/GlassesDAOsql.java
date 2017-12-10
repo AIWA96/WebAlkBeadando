@@ -20,7 +20,6 @@ public class GlassesDAOsql implements GlassesDAO {
 
     private String con;
     private Connection c;
-    private Statement stmt;
 
     public GlassesDAOsql() {
         con = DataBase.getCon();
@@ -63,14 +62,15 @@ public class GlassesDAOsql implements GlassesDAO {
         String gender;
         boolean sunglasses;
         ArrayList<Glasses> glasses = new ArrayList<>();
-        String sql = "SELECT * FROM Glasses WHERE  Brand = " + brand + ";";
+        String sql = "SELECT * FROM Glasses WHERE Brand = ?;";
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1, brand);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 model = rs.getString("Model");
                 price = rs.getFloat("Price");
@@ -80,7 +80,7 @@ public class GlassesDAOsql implements GlassesDAO {
                 glasses.add(new Glasses(brand, model, price, availableAt, gender, sunglasses));
             }
             rs.close();
-            stmt.close();
+            ps.close();
             c.close();
         } catch (SQLException e) {
             throw new StorageException(e);

@@ -201,7 +201,7 @@ public class ShopDAOsql implements ShopDAO {
 
     @Override
     public boolean updateShop(Shop shop) throws AlreadyExistException, StorageException, PersistenceException {
-        String select = "SELECT NAME FROM Shop WHERE LOCATION = ?;";
+        String select = "SELECT NAME FROM Shop WHERE LOCATION = ?";
         String sql = "UPDATE Shop SET NAME = ? WHERE LOCATION = ?";
         String oldName = null;
         try {
@@ -211,16 +211,16 @@ public class ShopDAOsql implements ShopDAO {
 
             PreparedStatement ps = c.prepareStatement(select);
             ps.setString(1, shop.getLocation());
-            if (ps.executeUpdate() == 0) {
-                throw new NotFoundException();
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                oldName = rs.getString("Name");
             }
 
             ps = c.prepareStatement(sql);
             ps.setString(1, shop.getName());
             ps.setString(2, shop.getLocation());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                oldName = rs.getString("NAME");
+            if (ps.executeUpdate() == 0) {
+                throw new NotFoundException();
             }
 
             c.commit();

@@ -28,22 +28,22 @@ public class GlassesController {
         this.glassesService = glassesService;
     }
 
-    @RequestMapping(value = {"/getglass/{brand}"},
+    @RequestMapping(value = {"/getglasses/{brand}"},
             method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Collection<Glasses> listGlassesByBrand(@PathVariable(value = "brand") String brand) throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
-        Collection<Glasses> glassesCollection = glassesService.getGlasses(brand);
-        return glassesCollection;
+        return glassesService.getGlasses(brand);
     }
 
-    @RequestMapping(value = {"/getglass/{brand, model}"},
+    /*@RequestMapping(value = {"/getglass/{brand}/{model}"},
             method = {RequestMethod.GET},
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Glasses listGlasses(@PathVariable(value = "brand, model") String brand, String model) throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
+    public Glasses listGlasses(@PathVariable String brand, @PathVariable String model) throws ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
+        System.out.println(brand + "\n" + model);
         return glassesService.getGlasses(brand, model);
-    }
+    }*/
 
     @RequestMapping(value = {"/add"}, method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
