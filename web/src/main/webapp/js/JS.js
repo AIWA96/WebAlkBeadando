@@ -171,7 +171,7 @@ jQuery(function () {
 
 //Get Accessories
 jQuery(function () {
-    readJSON = function () {
+    getAccessories = function () {
         $.ajax({
             type: "GET",
             url: "accessories/getaccessories",
