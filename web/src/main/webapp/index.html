@@ -1,16 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<link>
     <meta charset="UTF-8">
-    <title>My Web Page</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <title>My Page</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
-    <script src="js/js.js"></script>
+    <script src="js/JS.js"></script>
 </head>
-<body>
-<div class="content">
-    <h1 align="center">Hello World!</h1>
-    <button type="button" onclick="readJSON()">Get Json</button>
+
+<body onscroll="myFunction()">
+
+<div id="navbar">
+    <a href="#">Home</a>
+    <a href="#">Hungarian</a>
+    <a href="#">Login</a>
+    <a href="#">Video</a>
+    <a href="#">Registration</a>
+    <button type="button" onclick="readJSON()">Read Json</button>
 </div>
+
+<div class="container" id="container">
+
+    <div class="content" id="content">
+        <div class="header">
+            <h2>Lorem Ipsum</h2>
+            <p>Everything that you may want to know about</p>
+        </div>
+        <p>Lorem ipsum dolor sit amet, reque ornatus phaedrum eos ne, ut persecuti suscipiantur pro, inani soleat nostrum id qui. Cu sea omnes meliore tacimates, an quo soleat repudiandae. Eu mea ferri malis deseruisse, eu cum saperet laoreet accommodare. Omnesque nominavi an vis. Nam ne singulis vituperata, simul tractatos abhorreant usu ei. Sed reque dicat movet ea. Ea porro iuvaret vim, iracundia hendrerit disputationi an per, dicat scriptorem signiferumque has te.</p>
+        <p>An nam latine eleifend. Cum consul mediocrem id, in pro vidisse utroque. Duis solum vis eu, ius illud omnesque eu. Cu ullum decore quo. No cum blandit tincidunt abhorreant, ne nisl veniam eleifend per. Alia debet persius ei vis, sea homero inimicus in.</p>
+        <p>Consequat necessitatibus vim ut, nemore utamur et duo. Detracto omnesque legendos ex qui. Quo zril animal option cu, in ius vidit everti adipisci, te movet adolescens pro. Vel et nostro impetus percipit.</p>
+        <p>Cetero maiestatis sit cu. Ex tamquam voluptua eos. Mel an natum definitionem, ad audire integre interpretaris sea. Eam munere denique ne, aliquam sanctus dissentiet at cum. Nostrud insolens ut pri, id porro omittantur vis.</p>
+        <p>Esse adipiscing ut eos, ridens verear commune ad has. Ex mea dicam epicuri accusata, et mei noster assentior. Vix putent interesset persequeris no, tollit decore te duo. Vis petentium elaboraret no, no per veri labore, ex sed molestie accusata.</p>
+    </div>
+
+    <script>
+        var navbar = document.getElementById("navbar");
+        var sticky = navbar.offsetTop;
+
+        function myFunction() {
+            if (window.pageYOffset >= sticky) {
+                navbar.classList.add("sticky")
+            } else {
+                navbar.classList.remove("sticky");
+            }
+        }
+    </script>
+</div>
+
+<footer class="footer">
+    Ⓒ Copyright to Dániel Szöllősi
+    2017 All Right Reserved
+</footer>
+
 </body>
 </html>

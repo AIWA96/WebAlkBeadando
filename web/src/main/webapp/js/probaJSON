@@ -1,0 +1,50 @@
+[
+    {
+        "idNum": 2,
+        "name": "Horvát Rozi",
+        "gender": "FEMALE",
+        "salary": 90000,
+        "post": "OPTICIAN",
+        "shopName": "Trend Optika"
+    },
+    {
+        "idNum": 3,
+        "name": "Kiss Pista",
+        "gender": "MALE",
+        "salary": 90000,
+        "post": "OPTICIAN",
+        "shopName": "Trend Optika"
+    },
+    {
+        "idNum": 1,
+        "name": "Kubuk Matyi",
+        "gender": "MALE",
+        "salary": 85000,
+        "post": "MECHANIST",
+        "shopName": "Optiris"
+    },
+    {
+        "idNum": 10,
+        "name": "Test Elek",
+        "gender": "MALE",
+        "salary": 100000,
+        "post": "SALES",
+        "shopName": "Test"
+    },
+    {
+        "idNum": 11,
+        "name": "Test Elnék",
+        "gender": "FEMALE",
+        "salary": 120000,
+        "post": "Optician",
+        "shopName": "Test"
+    },
+    {
+        "idNum": 0,
+        "name": "Teszt Ember",
+        "gender": "FEMALE",
+        "salary": 90000,
+        "post": "OPTICIAN",
+        "shopName": "Trend Optika"
+    }
+]
