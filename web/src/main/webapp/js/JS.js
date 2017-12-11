@@ -163,6 +163,7 @@ jQuery(function () {
                 return false;
             }
         }
+        alert("Successful registration!")
         $.get("Login.html", function (data) {
             document.getElementById('content').innerHTML = data;
         });
