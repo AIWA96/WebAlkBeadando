@@ -31,10 +31,8 @@ public class DataBase {
                 "\t`NAME`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\t`LOCATION`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\tPRIMARY KEY(`NAME`));";
-        Connection c = null;
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
+
+        try (Connection c = DriverManager.getConnection(con)) {
             c.setAutoCommit(false);
 
             PreparedStatement ps = c.prepareStatement(sql);
@@ -91,10 +89,8 @@ public class DataBase {
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
             c.commit();
-            c.close();
+            ps.close();
         } catch (SQLException e) {
-            throw new CreateDataBaseException(e);
-        } catch (ClassNotFoundException e) {
             throw new CreateDataBaseException(e);
         }
     }

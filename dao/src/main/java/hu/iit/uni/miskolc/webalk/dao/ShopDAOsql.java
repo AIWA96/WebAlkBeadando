@@ -19,7 +19,6 @@ import java.util.List;
 public class ShopDAOsql implements ShopDAO {
 
     private String con;
-    private Connection c;
 
     public ShopDAOsql() {
         con = DataBase.getCon();
@@ -27,25 +26,21 @@ public class ShopDAOsql implements ShopDAO {
 
     @Override
     public void createShop(Shop shop) throws AlreadyExistException, StorageException, PersistenceException {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+        try (Connection conn = DriverManager.getConnection(con)) {
+            conn.setAutoCommit(false);
 
             String sql = "INSERT INTO Shop (Name, Location) VALUES (?, ?);";
-            PreparedStatement ps = c.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, shop.getName());
             ps.setString(2, shop.getLocation());
             ps.executeUpdate();
-            c.commit();
-            c.close();
+            conn.commit();
+            ps.close();
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
                 throw new AlreadyExistException(e);
             }
             throw new StorageException(e);
-        } catch (ClassNotFoundException e) {
-            throw new PersistenceException(e);
         }
     }
 
@@ -55,14 +50,12 @@ public class ShopDAOsql implements ShopDAO {
         String shopLocation;
         String shopsql = "SELECT * FROM Shop WHERE Name = ?;";
         String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
-        Shop shop = null;
+        Shop shop;
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+        try (Connection conn = DriverManager.getConnection(con)) {
+            conn.setAutoCommit(false);
 
-            PreparedStatement ps = c.prepareStatement(shopsql);
+            PreparedStatement ps = conn.prepareStatement(shopsql);
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -71,7 +64,7 @@ public class ShopDAOsql implements ShopDAO {
                 throw new NotFoundException();
             }
 
-            ps = c.prepareStatement(employeesql);
+            ps = conn.prepareStatement(employeesql);
             ps.setString(1, name);
             ResultSet rs1 = ps.executeQuery();
             while (rs1.next()) {
@@ -84,7 +77,7 @@ public class ShopDAOsql implements ShopDAO {
             }
             shop = new Shop(name, shopLocation, employees);
             rs.close();
-            c.close();
+            ps.close();
         } catch (SQLException e) {
             throw new StorageException(e);
         } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
@@ -103,12 +96,10 @@ public class ShopDAOsql implements ShopDAO {
         String shopsql = "SELECT * FROM Shop WHERE Location = ?;";
         String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+        try (Connection conn = DriverManager.getConnection(con)) {
+            conn.setAutoCommit(false);
 
-            PreparedStatement ps = c.prepareStatement(shopsql);
+            PreparedStatement ps = conn.prepareStatement(shopsql);
             ps.setString(1, location);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -116,7 +107,7 @@ public class ShopDAOsql implements ShopDAO {
                 shopNames.add(shopName);
             }
 
-            ps = c.prepareStatement(employeesql);
+            ps = conn.prepareStatement(employeesql);
             for (int i = 0; i < shopNames.size(); i++) {
                 Collection<Employee> employees = new ArrayList<>();
                 ps.setString(1, shopNames.get(i));
@@ -133,7 +124,6 @@ public class ShopDAOsql implements ShopDAO {
             }
             rs.close();
             ps.close();
-            c.close();
         } catch (SQLException e) {
             throw new StorageException(e);
         } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
@@ -154,12 +144,10 @@ public class ShopDAOsql implements ShopDAO {
         String shopsql = "SELECT * FROM Shop;";
         String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+        try (Connection conn = DriverManager.getConnection(con)) {
+            conn.setAutoCommit(false);
 
-            PreparedStatement ps = c.prepareStatement(shopsql);
+            PreparedStatement ps = conn.prepareStatement(shopsql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 shopName = rs.getString("Name");
@@ -168,7 +156,7 @@ public class ShopDAOsql implements ShopDAO {
                 shopLocations.add(shopLocation);
             }
 
-            ps = c.prepareStatement(employeesql);
+            ps = conn.prepareStatement(employeesql);
             for (int i = 0; i < shopNames.size(); i++) {
                 Collection<Employee> employees = new ArrayList<>();
                 ps.setString(1, shopNames.get(i));
@@ -188,7 +176,6 @@ public class ShopDAOsql implements ShopDAO {
             }
             rs.close();
             ps.close();
-            c.close();
         } catch (SQLException e) {
             throw new StorageException(e);
         } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
@@ -204,28 +191,26 @@ public class ShopDAOsql implements ShopDAO {
         String select = "SELECT NAME FROM Shop WHERE LOCATION = ?";
         String sql = "UPDATE Shop SET NAME = ? WHERE LOCATION = ?";
         String oldName = null;
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+        try (Connection conn = DriverManager.getConnection(con)) {
+            conn.setAutoCommit(false);
 
-            PreparedStatement ps = c.prepareStatement(select);
+            PreparedStatement ps = conn.prepareStatement(select);
             ps.setString(1, shop.getLocation());
             ResultSet rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 oldName = rs.getString("Name");
             }
 
-            ps = c.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, shop.getName());
             ps.setString(2, shop.getLocation());
             if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
 
-            c.commit();
+            conn.commit();
             ps.close();
-            c.close();
+            rs.close();
             EmployeeDAO employeeDAO = new EmployeeDAOsql();
             if (!employeeDAO.updateEmployeeWorkPlaceName(shop.getName(), oldName)) {
                 throw new PersistenceException("Failure!");
@@ -242,18 +227,17 @@ public class ShopDAOsql implements ShopDAO {
 
     @Override
     public boolean deleteShop(String name) throws StorageException, PersistenceException {
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection(con);
-            c.setAutoCommit(false);
+        try (Connection conn = DriverManager.getConnection(con)) {
+            conn.setAutoCommit(false);
+
             String sql = "DELETE FROM Shop WHERE Name = ?";
-            PreparedStatement ps = c.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, name);
             if (ps.executeUpdate() == 0) {
                 throw new NotFoundException();
             }
-            c.commit();
-            c.close();
+            conn.commit();
+            ps.close();
         } catch (SQLException e) {
             throw new StorageException(e);
         } catch (Exception e) {
