@@ -6,10 +6,7 @@ import hu.iit.uni.miskolc.webalk.core.model.Shop;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.EmployeeDAO;
 import hu.iit.uni.miskolc.webalk.service.dao.ShopDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NoArgumentException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,9 +16,11 @@ import java.util.List;
 public class ShopDAOsql implements ShopDAO {
 
     private String con;
+    private DataBase db;
 
     public ShopDAOsql() {
-        con = DataBase.getCon();
+        db = DataBase.getInstance();
+        con = db.getCon();
     }
 
     @Override

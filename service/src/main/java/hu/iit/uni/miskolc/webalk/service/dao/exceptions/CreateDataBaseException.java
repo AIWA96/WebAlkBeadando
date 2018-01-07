@@ -1,6 +1,6 @@
 package hu.iit.uni.miskolc.webalk.service.dao.exceptions;
 
-public class CreateDataBaseException extends Exception {
+public class CreateDataBaseException extends Exception{
     public CreateDataBaseException() {
     }
 

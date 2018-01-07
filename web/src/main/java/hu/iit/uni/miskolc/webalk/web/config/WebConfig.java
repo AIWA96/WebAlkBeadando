@@ -28,12 +28,12 @@ import org.springframework.context.annotation.Configuration;
 public class WebConfig {
 
     @Bean
-    public AccessoriesDAO accessoriesDAO() throws CreateDataBaseException {
+    public AccessoriesDAO accessoriesDAO() {
         return new AccessoriesDAOsql();
     }
 
     @Bean
-    public AccessoriesService accessoriesService() throws CreateDataBaseException {
+    public AccessoriesService accessoriesService() {
         return new AccessoriesServiceImpl(accessoriesDAO());
     }
 
@@ -53,7 +53,7 @@ public class WebConfig {
     }
 
     @Bean
-    public ShopController shopController() {
+    public ShopController shopController() throws CreateDataBaseException {
         return new ShopController(shopService());
     }
 
@@ -68,7 +68,7 @@ public class WebConfig {
     }
 
     @Bean
-    public EmployeeController employeeController() {
+    public EmployeeController employeeController() throws CreateDataBaseException {
         return new EmployeeController(employeeService());
     }
 
@@ -83,7 +83,7 @@ public class WebConfig {
     }
 
     @Bean
-    public GlassesController glassesController() {
+    public GlassesController glassesController() throws CreateDataBaseException {
         return new GlassesController(glassesService());
     }
 }

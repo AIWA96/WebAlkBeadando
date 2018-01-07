@@ -1,7 +1,5 @@
 package hu.iit.uni.miskolc.webalk.dao;
 
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,16 +9,33 @@ import java.sql.SQLException;
 public class DataBase {
 
     private static final String con = "jdbc:sqlite:./database/glassShop.db";
+    private static DataBase instance = null;
+    private static boolean dbCreated = false;
 
-    public DataBase() throws CreateDataBaseException {
+    private DataBase() {
         createDataBase();
+    }
+
+    public static DataBase getInstance() {
+        if (instance == null) {
+            synchronized (DataBase.class) {
+                if (instance == null) {
+                    instance = new DataBase();
+                }
+            }
+        }
+        return instance;
     }
 
     public static String getCon() {
         return con;
     }
 
-    public void createDataBase() throws CreateDataBaseException {
+    public static boolean isDBCreated() {
+        return dbCreated;
+    }
+
+    public void createDataBase() {
         File f = new File("./database/glassShop.db");
         if (f.exists() && !f.isDirectory()) {
             return;
@@ -89,9 +104,10 @@ public class DataBase {
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
             c.commit();
+            dbCreated = true;
             ps.close();
         } catch (SQLException e) {
-            throw new CreateDataBaseException(e);
+            dbCreated = false;
         }
     }
 }

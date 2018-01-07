@@ -10,6 +10,7 @@ import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemExceptio
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
+import hu.iit.uni.miskolc.webalk.dao.DataBase;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,11 @@ public class AccessoriesController {
     @Autowired
     private AccessoriesService accessoriesService;
 
-    public AccessoriesController(AccessoriesService accessoriesService) {
+    public AccessoriesController(AccessoriesService accessoriesService) throws CreateDataBaseException {
         this.accessoriesService = accessoriesService;
+        if (DataBase.isDBCreated() == false){
+            throw new CreateDataBaseException();
+        }
     }
 
     @RequestMapping(value = {"/getaccessories"}, method = {RequestMethod.GET},
@@ -79,7 +83,7 @@ public class AccessoriesController {
     }
 
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED, reason = "Az adatbázis létrehozása sikertelen!")
-    @ExceptionHandler({CreateDataBaseException.class, AlreadyExistException.class})
+    @ExceptionHandler({AlreadyExistException.class})
     public void noDataBaseError() {
     }
 

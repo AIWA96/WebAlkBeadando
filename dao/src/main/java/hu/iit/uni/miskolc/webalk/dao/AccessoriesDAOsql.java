@@ -14,9 +14,11 @@ import java.util.Collection;
 public class AccessoriesDAOsql implements AccessoriesDAO {
 
     private String con;
+    private DataBase db;
 
     public AccessoriesDAOsql() {
-        con = DataBase.getCon();
+        db = DataBase.getInstance();
+        con = db.getCon();
     }
 
     @Override

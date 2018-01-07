@@ -11,8 +11,11 @@ import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemExceptio
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
+import hu.iit.uni.miskolc.webalk.dao.DataBase;
 import hu.iit.uni.miskolc.webalk.dao.EmployeeDAOsql;
 import hu.iit.uni.miskolc.webalk.service.EmployeeServiceImpl;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,8 +30,11 @@ public class ShopController {
     @Autowired
     private ShopService shopService;
 
-    public ShopController(ShopService shopService) {
+    public ShopController(ShopService shopService) throws CreateDataBaseException {
         this.shopService = shopService;
+        if (DataBase.isDBCreated() == false){
+            throw new CreateDataBaseException();
+        }
     }
 
     @RequestMapping(value = {"/getshops"},
@@ -59,7 +65,7 @@ public class ShopController {
     @RequestMapping(value = "/updateshop", method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public boolean update(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, StorageProblemException, ExistingProblemException, PersistenceException, MissingArgumentException {
+    public boolean update(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, StorageProblemException, ExistingProblemException, PersistenceException, MissingArgumentException, CreateDataBaseException {
         Collection collection = new ArrayList<>();
 
         EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOsql());
@@ -82,6 +88,11 @@ public class ShopController {
     @ResponseStatus(value = HttpStatus.ALREADY_REPORTED, reason = "Már létező adat")
     @ExceptionHandler({ExistingProblemException.class})
     public void existingError() {
+    }
+
+    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED, reason = "Az adatbázis létrehozása sikertelen!")
+    @ExceptionHandler({CreateDataBaseException.class, AlreadyExistException.class})
+    public void noDataBaseError() {
     }
 
     @ExceptionHandler({PersistenceException.class})

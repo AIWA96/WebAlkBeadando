@@ -7,10 +7,7 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NoArgumentException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,10 +16,11 @@ import java.util.Collection;
 public class GlassesDAOsql implements GlassesDAO {
 
     private String con;
-
+    private DataBase db;
 
     public GlassesDAOsql() {
-        con = DataBase.getCon();
+        db = DataBase.getInstance();
+        con = db.getCon();
     }
 
     @Override

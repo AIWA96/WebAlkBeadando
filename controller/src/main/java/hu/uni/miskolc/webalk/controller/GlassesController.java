@@ -11,6 +11,9 @@ import hu.iit.uni.miskolc.webalk.core.service.exceptions.ExistingProblemExceptio
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.MissingArgumentException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.StorageProblemException;
+import hu.iit.uni.miskolc.webalk.dao.DataBase;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,8 +27,11 @@ public class GlassesController {
     @Autowired
     private GlassesService glassesService;
 
-    public GlassesController(GlassesService glassesService) {
+    public GlassesController(GlassesService glassesService) throws CreateDataBaseException {
         this.glassesService = glassesService;
+        if (DataBase.isDBCreated() == false){
+            throw new CreateDataBaseException();
+        }
     }
 
     @RequestMapping(value = {"/getglasses/{brand}"},
@@ -76,6 +82,10 @@ public class GlassesController {
     @ResponseStatus(value = HttpStatus.ALREADY_REPORTED, reason = "Már létező adat")
     @ExceptionHandler({ExistingProblemException.class})
     public void existingError() {
+    }
+    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED, reason = "Az adatbázis létrehozása sikertelen!")
+    @ExceptionHandler({CreateDataBaseException.class, AlreadyExistException.class})
+    public void noDataBaseError() {
     }
 
     @ExceptionHandler({PersistenceException.class})
