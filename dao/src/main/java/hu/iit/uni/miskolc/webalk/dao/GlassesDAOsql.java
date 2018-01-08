@@ -20,7 +20,7 @@ public class GlassesDAOsql implements GlassesDAO {
 
     public GlassesDAOsql() {
         db = DataBase.getInstance();
-        con = db.getCon();
+        con = db.getConnection();
     }
 
     @Override

@@ -6,17 +6,19 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DataBase {
+public final class DataBase {
 
-    private static final String con = "jdbc:sqlite:./database/glassShop.db";
+    private static final String con = "jdbc:sqlite:";
+    private static final String nection = "./database/glassShop.db";
     private static DataBase instance = null;
     private static boolean dbCreated = false;
+    private static Exception cause = null;
 
     private DataBase() {
         createDataBase();
     }
 
-    public static DataBase getInstance() {
+    public static final DataBase getInstance() {
         if (instance == null) {
             synchronized (DataBase.class) {
                 if (instance == null) {
@@ -27,16 +29,20 @@ public class DataBase {
         return instance;
     }
 
-    public static String getCon() {
-        return con;
+    public static final String getConnection() {
+        return con + nection;
     }
 
-    public static boolean isDBCreated() {
+    public static final boolean isDBCreated() {
         return dbCreated;
     }
 
-    public void createDataBase() {
-        File f = new File("./database/glassShop.db");
+    public static final Exception getCause(){
+        return cause;
+    }
+
+    public static final void createDataBase() {
+        File f = new File(nection);
         if (f.exists() && !f.isDirectory()) {
             return;
         }
@@ -107,6 +113,7 @@ public class DataBase {
             dbCreated = true;
             ps.close();
         } catch (SQLException e) {
+            cause = new Exception(e);
             dbCreated = false;
         }
     }

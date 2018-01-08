@@ -18,7 +18,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
 
     public AccessoriesDAOsql() {
         db = DataBase.getInstance();
-        con = db.getCon();
+        con = db.getConnection();
     }
 
     @Override

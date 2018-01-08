@@ -30,7 +30,7 @@ public class GlassesController {
     public GlassesController(GlassesService glassesService) throws CreateDataBaseException {
         this.glassesService = glassesService;
         if (DataBase.isDBCreated() == false){
-            throw new CreateDataBaseException();
+            throw new CreateDataBaseException(DataBase.getCause());
         }
     }
 

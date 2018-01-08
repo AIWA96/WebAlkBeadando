@@ -33,7 +33,7 @@ public class ShopController {
     public ShopController(ShopService shopService) throws CreateDataBaseException {
         this.shopService = shopService;
         if (DataBase.isDBCreated() == false){
-            throw new CreateDataBaseException();
+            throw new CreateDataBaseException(DataBase.getCause());
         }
     }
 

@@ -29,7 +29,7 @@ public class AccessoriesController {
     public AccessoriesController(AccessoriesService accessoriesService) throws CreateDataBaseException {
         this.accessoriesService = accessoriesService;
         if (DataBase.isDBCreated() == false){
-            throw new CreateDataBaseException();
+            throw new CreateDataBaseException(DataBase.getCause());
         }
     }
 

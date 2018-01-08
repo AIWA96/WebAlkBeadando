@@ -20,7 +20,7 @@ public class ShopDAOsql implements ShopDAO {
 
     public ShopDAOsql() {
         db = DataBase.getInstance();
-        con = db.getCon();
+        con = db.getConnection();
     }
 
     @Override

@@ -20,7 +20,7 @@ public class EmployeeDAOsql implements EmployeeDAO {
 
     public EmployeeDAOsql() {
         db = DataBase.getInstance();
-        con = db.getCon();
+        con = db.getConnection();
     }
 
     @Override
