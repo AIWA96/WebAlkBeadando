@@ -91,7 +91,7 @@ public class Employee {
     }
 
     public void setShopName(String shopName) throws NoNameException {
-        if (shopName == null || shopName == "") {
+        if (shopName == null || shopName.equals("")) {
             throw new NoNameException("Shop name where the employee is working must be set!");
         }
         this.shopName = shopName;
