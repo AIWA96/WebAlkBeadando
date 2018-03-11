@@ -2,8 +2,9 @@
 .idea/*
 *.iml
 *.iws
-*/App\.java
+dao/src/main/java/App\.java
+*/glassShop\.db
 
 # Maven
 log/
-*/target/
+*/target/*
