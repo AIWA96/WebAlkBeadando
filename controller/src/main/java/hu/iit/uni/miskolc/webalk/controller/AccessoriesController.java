@@ -1,4 +1,4 @@
-package hu.uni.miskolc.webalk.controller;
+package hu.iit.uni.miskolc.webalk.controller;
 
 import hu.iit.uni.miskolc.webalk.controller.dto.AccessoriesRequest;
 import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;

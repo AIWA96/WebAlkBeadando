@@ -1,5 +1,9 @@
 package hu.iit.uni.miskolc.webalk.web.config;
 
+import hu.iit.uni.miskolc.webalk.controller.AccessoriesController;
+import hu.iit.uni.miskolc.webalk.controller.EmployeeController;
+import hu.iit.uni.miskolc.webalk.controller.GlassesController;
+import hu.iit.uni.miskolc.webalk.controller.ShopController;
 import hu.iit.uni.miskolc.webalk.core.service.AccessoriesService;
 import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
 import hu.iit.uni.miskolc.webalk.core.service.GlassesService;
@@ -17,10 +21,6 @@ import hu.iit.uni.miskolc.webalk.service.dao.EmployeeDAO;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
 import hu.iit.uni.miskolc.webalk.service.dao.ShopDAO;
 import hu.iit.uni.miskolc.webalk.service.dao.exceptions.CreateDataBaseException;
-import hu.uni.miskolc.webalk.controller.AccessoriesController;
-import hu.uni.miskolc.webalk.controller.EmployeeController;
-import hu.uni.miskolc.webalk.controller.GlassesController;
-import hu.uni.miskolc.webalk.controller.ShopController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

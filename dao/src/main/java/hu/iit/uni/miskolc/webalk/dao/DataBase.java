@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public final class DataBase {
 
     private static final String con = "jdbc:sqlite:";
-    private static final String nection = "./database/glassShop.db";
+    private static final String connection = "./database/glassShop.db";
     private static DataBase instance = null;
     private static boolean dbCreated = false;
     private static Exception cause = null;
@@ -29,31 +29,41 @@ public final class DataBase {
         return instance;
     }
 
+    public static final String getPath() {
+        return new File("glassShop.db").getAbsolutePath();
+    }
+
     public static final String getConnection() {
-        return con + nection;
+        return con + connection;
     }
 
     public static final boolean isDBCreated() {
         return dbCreated;
     }
 
-    public static final Exception getCause(){
+    public static final Exception getCause() {
         return cause;
     }
 
     public static final void createDataBase() {
-        File f = new File(nection);
-        if (f.exists() && !f.isDirectory()) {
-            return;
+        {
+            File f = new File(connection);
+            if (f.exists() && !f.isDirectory()) {
+                dbCreated = true;
+                return;
+            }
+            f = null;
         }
-
 
         String sql = "CREATE TABLE IF NOT EXISTS `Shop` (\n" +
                 "\t`NAME`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\t`LOCATION`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\tPRIMARY KEY(`NAME`));";
 
-        try (Connection c = DriverManager.getConnection(con)) {
+        Connection c = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            DriverManager.getConnection(con);
             c.setAutoCommit(false);
 
             PreparedStatement ps = c.prepareStatement(sql);
@@ -115,6 +125,8 @@ public final class DataBase {
         } catch (SQLException e) {
             cause = new Exception(e);
             dbCreated = false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
