@@ -63,7 +63,7 @@ public final class DataBase {
         Connection c = null;
         try {
             Class.forName("org.sqlite.JDBC");
-            DriverManager.getConnection(con);
+            c = DriverManager.getConnection(getConnection());
             c.setAutoCommit(false);
 
             PreparedStatement ps = c.prepareStatement(sql);
