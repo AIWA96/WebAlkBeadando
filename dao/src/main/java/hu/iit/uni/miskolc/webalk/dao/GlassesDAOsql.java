@@ -7,7 +7,10 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 import hu.iit.uni.miskolc.webalk.core.model.Glasses;
 import hu.iit.uni.miskolc.webalk.core.service.exceptions.PersistenceException;
 import hu.iit.uni.miskolc.webalk.service.dao.GlassesDAO;
-import hu.iit.uni.miskolc.webalk.service.dao.exceptions.*;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.AlreadyExistException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NoArgumentException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.NotFoundException;
+import hu.iit.uni.miskolc.webalk.service.dao.exceptions.StorageException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.Collection;
 
 public class GlassesDAOsql implements GlassesDAO {
 
+    private Connection conn = null;
     private String con;
     private DataBase db;
 
@@ -26,7 +30,9 @@ public class GlassesDAOsql implements GlassesDAO {
     @Override
     public void createGlasses(Glasses glasses) throws AlreadyExistException, StorageException, PersistenceException {
         String sql = "INSERT INTO Glasses (Brand, Model, Price, AvailableAt, Gender, Sunglasses) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -45,6 +51,16 @@ public class GlassesDAOsql implements GlassesDAO {
                 throw new AlreadyExistException(e);
             }
             throw new StorageException(e);
+        } catch (ClassNotFoundException e) {
+            throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
+            sql = null;
         }
     }
 
@@ -57,7 +73,9 @@ public class GlassesDAOsql implements GlassesDAO {
         boolean sunglasses;
         ArrayList<Glasses> glasses = new ArrayList<>();
         String sql = "SELECT * FROM Glasses WHERE Brand = ?;";
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -68,7 +86,7 @@ public class GlassesDAOsql implements GlassesDAO {
                 price = rs.getFloat("Price");
                 availableAt = rs.getString("AvailableAt");
                 gender = rs.getString("Gender");
-                sunglasses = rs.getInt("Sunglasses") > 0 ? true : false;
+                sunglasses = rs.getInt("Sunglasses") > 0;
                 glasses.add(new Glasses(brand, model, price, availableAt, gender, sunglasses));
             }
             rs.close();
@@ -77,6 +95,14 @@ public class GlassesDAOsql implements GlassesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
+            sql = null;
         }
         return glasses;
     }
@@ -89,16 +115,18 @@ public class GlassesDAOsql implements GlassesDAO {
         boolean sunglasses = false;
         Glasses glasses;
         String sql = "SELECT * FROM Glasses WHERE  Brand = \'" + brand + "\' AND " + "Model = \'" + model + "\';";
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            if (rs.next() == true) {
+            if (rs.next()) {
                 price = rs.getFloat("Price");
                 availableAt = rs.getString("AvailableAt");
                 gender = rs.getString("Gender");
-                sunglasses = rs.getInt("Sunglasses") > 0 ? true : false;
+                sunglasses = rs.getInt("Sunglasses") > 0;
             }
             glasses = new Glasses(brand, model, price, availableAt, gender, sunglasses);
             rs.close();
@@ -109,13 +137,22 @@ public class GlassesDAOsql implements GlassesDAO {
             throw new NoArgumentException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
         }
         return glasses;
     }
 
     @Override
     public boolean updateGlasses(Glasses glasses) throws AlreadyExistException, StorageException, PersistenceException {
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             String sql = "UPDATE Glasses SET Price = ? WHERE Brand = ? AND Model = ?";
@@ -134,13 +171,22 @@ public class GlassesDAOsql implements GlassesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
         }
         return true;
     }
 
     @Override
     public boolean deleteGlasses(String brand, String model) throws StorageException, PersistenceException {
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             String sql = "DELETE FROM Glasses WHERE Brand = ? AND Model = ?";
@@ -156,6 +202,13 @@ public class GlassesDAOsql implements GlassesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
         }
         return true;
     }

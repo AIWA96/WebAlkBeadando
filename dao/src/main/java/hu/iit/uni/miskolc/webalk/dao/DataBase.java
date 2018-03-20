@@ -18,7 +18,7 @@ public final class DataBase {
         createDataBase();
     }
 
-    public static final DataBase getInstance() {
+    public static DataBase getInstance() {
         if (instance == null) {
             synchronized (DataBase.class) {
                 if (instance == null) {
@@ -29,30 +29,27 @@ public final class DataBase {
         return instance;
     }
 
-    public static final String getPath() {
+    public static String getPath() {
         return new File("glassShop.db").getAbsolutePath();
     }
 
-    public static final String getConnection() {
+    public static String getConnection() {
         return con + connection;
     }
 
-    public static final boolean isDBCreated() {
+    public static boolean isDBCreated() {
         return dbCreated;
     }
 
-    public static final Exception getCause() {
+    public static Exception getCause() {
         return cause;
     }
 
-    public static final void createDataBase() {
-        {
-            File f = new File(connection);
-            if (f.exists() && !f.isDirectory()) {
-                dbCreated = true;
-                return;
-            }
-            f = null;
+    private static void createDataBase() {
+        File f = new File(connection);
+        if (f.exists() && !f.isDirectory()) {
+            dbCreated = true;
+            return;
         }
 
         String sql = "CREATE TABLE IF NOT EXISTS `Shop` (\n" +
@@ -61,12 +58,13 @@ public final class DataBase {
                 "\tPRIMARY KEY(`NAME`));";
 
         Connection c = null;
-        try {
+        PreparedStatement ps = null;
+        try (String asd = "asd") {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(getConnection());
             c.setAutoCommit(false);
 
-            PreparedStatement ps = c.prepareStatement(sql);
+            ps = c.prepareStatement(sql);
             ps.executeUpdate();
             sql = "CREATE TABLE IF NOT EXISTS `Employee` (\n" +
                     "\t`IDNUM`\tINT NOT NULL,\n" +
@@ -121,12 +119,17 @@ public final class DataBase {
             ps.executeUpdate();
             c.commit();
             dbCreated = true;
-            ps.close();
         } catch (SQLException e) {
             cause = new Exception(e);
             dbCreated = false;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            try { c.close(); ps.close(); }
+            catch (SQLException e) { e.printStackTrace(); }
+            c = null;
+            ps = null;
+            sql = null;
         }
     }
 }

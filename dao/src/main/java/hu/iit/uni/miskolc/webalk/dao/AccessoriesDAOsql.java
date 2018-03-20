@@ -15,6 +15,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
 
     private String con;
     private DataBase db;
+    private Connection conn = null;
 
     public AccessoriesDAOsql() {
         db = DataBase.getInstance();
@@ -23,7 +24,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
 
     @Override
     public void createAccessories(Accessories accessories) throws AlreadyExistException, StorageException {
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             String sql = "INSERT INTO Accessories (Appellation, Brand, Price) VALUES (?, ?, ?)";
@@ -35,12 +38,21 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             ps.executeUpdate();
 
             conn.commit();
-            ps.close();
+
         } catch (SQLException e) {
             if (e.getErrorCode() == 19) {
                 throw new AlreadyExistException(e);
             }
             throw new StorageException(e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
         }
     }
 
@@ -49,7 +61,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
         String brand;
         float price;
         Collection<Accessories> accessories = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             String sql = "SELECT * FROM Accessories WHERE Appellation = ?";
@@ -67,6 +81,13 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
         }
         return accessories;
     }
@@ -77,7 +98,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
         float price;
         String sql = "SELECT * FROM Accessories WHERE Brand = ?;";
         Collection<Accessories> accessories = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -94,6 +117,14 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
+            sql = null;
         }
         return accessories;
     }
@@ -105,7 +136,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
         float price;
         String sql = "SELECT * FROM Accessories";
         Collection<Accessories> accessories = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -125,13 +158,23 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
+            sql = null;
         }
         return accessories;
     }
 
     @Override
     public boolean updateAccessories(Accessories accessories) throws AlreadyExistException, StorageException, PersistenceException {
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             String sql = "UPDATE Accessories SET Price = ? WHERE Appellation = ? AND Brand = ?";
@@ -150,6 +193,13 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
         }
         return true;
     }
@@ -157,7 +207,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     @Override
     public boolean deleteAccessories(Accessories accessories) throws StorageException, PersistenceException {
         String sql = "DELETE FROM Accessories WHERE Brand = ? AND Appellation = ?";
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -172,6 +224,14 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
+            sql = null;
         }
         return true;
     }
@@ -179,7 +239,9 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     @Override
     public boolean deleteAccessoriesByBrand(String brand) throws StorageException, PersistenceException {
         String sql = "DELETE FROM Accessories WHERE Brand = ?";
-        try (Connection conn = DriverManager.getConnection(con)) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -193,6 +255,14 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
             throw new StorageException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            conn = null;
+            sql = null;
         }
         return true;
     }
