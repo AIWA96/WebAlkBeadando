@@ -26,7 +26,7 @@ public class Employee {
      * @throws NoGenderException
      */
     public Employee(int idNum, String name, String gender, float salary, String post, String shopName) throws NoNameException, NoPostException, InvalidSalaryException, NoGenderException {
-        this.idNum = idNum;
+        setIdNum(idNum);
         setShopName(shopName);
         setName(name);
         setGender(gender);
@@ -38,7 +38,7 @@ public class Employee {
         return idNum;
     }
 
-    public void setIdNum(int idNum) {
+    private void setIdNum(int idNum) {
         this.idNum = idNum;
     }
 
@@ -104,9 +104,8 @@ public class Employee {
 
         Employee employee = (Employee) o;
 
-        if (idNum != employee.idNum) return false;
-        if (Float.compare(employee.salary, salary) != 0) return false;
-        return name.equals(employee.name);
+        return idNum == employee.idNum &&
+                Float.compare(employee.salary, salary) == 0 && name.equals(employee.name);
     }
 
     @Override

@@ -31,9 +31,7 @@ public class Shop {
      * @return result - the number of employees
      */
     public int getNumberOfEmployees() {
-        int result;
-        result = employees.size();
-        return result;
+        return employees.size();
     }
 
     public String getName() {
@@ -52,7 +50,7 @@ public class Shop {
     }
 
     public void setLocation(String location) throws NoLocationException {
-        if (location == null || location == "") {
+        if (location == null || location.equals("")) {
             throw new NoLocationException("A shop must have a location!");
         }
         this.location = location;
@@ -62,8 +60,8 @@ public class Shop {
         return employees;
     }
 
-    public void setEmployees(Collection<Employee> employees) throws NoEmployeeException {
-        if (employees == null || employees.isEmpty() == true) {
+    private void setEmployees(Collection<Employee> employees) throws NoEmployeeException {
+        if (employees == null || employees.isEmpty()) {
             throw new NoEmployeeException("A shop must contain one employee!");
         }
         this.employees = employees;

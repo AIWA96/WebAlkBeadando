@@ -30,7 +30,7 @@ public class Glasses {
         setPrice(price);
         setAvailableAt(availableAt);
         setGender(gender);
-        this.sunglasses = sunglasses;
+        setSunglasses(sunglasses);
     }
 
     public String getBrand() {
@@ -59,7 +59,7 @@ public class Glasses {
         return price;
     }
 
-    public void setPrice(float price) throws InvalidPriceException {
+    private void setPrice(float price) throws InvalidPriceException {
         if (price < 1) {
             throw new InvalidPriceException("A price cannot be negative!");
         }
@@ -70,8 +70,8 @@ public class Glasses {
         return availableAt;
     }
 
-    public void setAvailableAt(String availableAt) throws NoLocationSetException {
-        if (availableAt == null || availableAt == "") {
+    private void setAvailableAt(String availableAt) throws NoLocationSetException {
+        if (availableAt == null || availableAt.equals("")) {
             throw new NoLocationSetException("The shop's location must be set!");
         }
         this.availableAt = availableAt;
@@ -92,7 +92,7 @@ public class Glasses {
         return sunglasses;
     }
 
-    public void setSunglasses(boolean sunglass) {
+    private void setSunglasses(boolean sunglasses) {
         this.sunglasses = sunglasses;
     }
 
@@ -103,10 +103,10 @@ public class Glasses {
 
         Glasses that = (Glasses) o;
 
-        if (Float.compare(that.price, price) != 0) return false;
-        if (!brand.equals(that.brand)) return false;
-        if (!model.equals(that.model)) return false;
-        return availableAt != null ? availableAt.equals(that.availableAt) : that.availableAt == null;
+        return Float.compare(that.price, price) == 0 &&
+                brand.equals(that.brand) && model.equals(that.model) &&
+                (availableAt != null ? availableAt.equals(that.availableAt) :
+                        that.availableAt == null);
     }
 
     @Override

@@ -58,7 +58,7 @@ public class ShopDAOsql implements ShopDAO {
 
     @Override
     public Shop getShopByName(String name) throws StorageException, PersistenceException, NoArgumentException {
-        Collection<Employee> employees = new ArrayList<>();
+        Collection<Employee> employees;
         Shop shop;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -80,21 +80,20 @@ public class ShopDAOsql implements ShopDAO {
 
             ps = conn.prepareStatement(employeesql);
             ps.setString(1, name);
-            ResultSet rs1 = ps.executeQuery();
-            while (rs1.next()) {
-                int id = rs1.getInt("IDNUM");
-                String ename = rs1.getString("NAME");
-                String gender = rs1.getString("GENDER");
-                float salary = rs1.getFloat("SALARY");
-                String post = rs1.getString("POST");
-                employees.add(new Employee(id, ename, gender, salary, post, name));
+            rs = ps.executeQuery();
+
+            employees= getEmployeesFromShop(rs, name);
+
+            if (employees.isEmpty()){
+                throw new NoEmployeeException("No Employee is found in this shop!");
             }
+
             shop = new Shop(name, shopLocation, employees);
             rs.close();
             ps.close();
         } catch (SQLException e) {
             throw new StorageException(e);
-        } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
+        } catch (NoEmployeeException | NoNameException | NoLocationException e) {
             throw new NoArgumentException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
@@ -118,7 +117,6 @@ public class ShopDAOsql implements ShopDAO {
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
-            String shopName;
             String shopsql = "SELECT * FROM Shop WHERE Location = ?;";
             String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
@@ -126,30 +124,28 @@ public class ShopDAOsql implements ShopDAO {
             ps.setString(1, location);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                shopName = rs.getString("Name");
-                shopNames.add(shopName);
+                shopNames.add(rs.getString("Name"));
             }
 
             ps = conn.prepareStatement(employeesql);
             for (String shopName1 : shopNames) {
-                Collection<Employee> employees = new ArrayList<>();
+                Collection<Employee> employees;
                 ps.setString(1, shopName1);
                 rs = ps.executeQuery();
-                while (rs.next()) {
-                    int id = rs.getInt("IDNUM");
-                    String ename = rs.getString("NAME");
-                    String gender = rs.getString("GENDER");
-                    float salary = rs.getFloat("SALARY");
-                    String post = rs.getString("POST");
-                    employees.add(new Employee(id, ename, gender, salary, post, shopName1));
+
+                employees=getEmployeesFromShop(rs, shopName1);
+
+                if (employees.isEmpty()){
+                    throw new NoEmployeeException("No Employee is found in this shop!");
                 }
+
                 shops.add(new Shop(shopName1, location, employees));
             }
             rs.close();
             ps.close();
         } catch (SQLException e) {
             throw new StorageException(e);
-        } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
+        } catch (NoEmployeeException | NoNameException | NoLocationException | NoArgumentException e) {
             throw new NoArgumentException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
@@ -175,35 +171,26 @@ public class ShopDAOsql implements ShopDAO {
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
-            String shopName;
-            String shopLocation;
             String shopsql = "SELECT * FROM Shop;";
             String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
             PreparedStatement ps = conn.prepareStatement(shopsql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                shopName = rs.getString("Name");
-                shopLocation = rs.getString("Location");
-                shopNames.add(shopName);
-                shopLocations.add(shopLocation);
+                shopNames.add(rs.getString("Name"));
+                shopLocations.add(rs.getString("Location"));
             }
 
             ps = conn.prepareStatement(employeesql);
             for (int i = 0; i < shopNames.size(); i++) {
-                Collection<Employee> employees = new ArrayList<>();
+                Collection<Employee> employees;
                 ps.setString(1, shopNames.get(i));
                 rs = ps.executeQuery();
-                while (rs.next()) {
-                    int id = rs.getInt("IDNUM");
-                    String ename = rs.getString("NAME");
-                    String gender = rs.getString("GENDER");
-                    float salary = rs.getFloat("SALARY");
-                    String post = rs.getString("POST");
-                    employees.add(new Employee(id, ename, gender, salary, post, shopNames.get(i)));
-                }
-                if (employees.isEmpty()) {
-                    continue;
+
+                employees=getEmployeesFromShop(rs, shopNames.get(i));
+
+                if (employees.isEmpty()){
+                    throw new NoEmployeeException("No Employee is found in this shop!");
                 }
                 shops.add(new Shop(shopNames.get(i), shopLocations.get(i), employees));
             }
@@ -211,7 +198,7 @@ public class ShopDAOsql implements ShopDAO {
             ps.close();
         } catch (SQLException e) {
             throw new StorageException(e);
-        } catch (NoEmployeeException | NoNameException | NoLocationException | NoGenderException | NoPostException | InvalidSalaryException e) {
+        } catch (NoEmployeeException | NoNameException | NoLocationException e) {
             throw new NoArgumentException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);
@@ -308,5 +295,26 @@ public class ShopDAOsql implements ShopDAO {
     @Override
     public boolean deleteShop(Shop shop) throws PersistenceException, StorageException {
         return deleteShop(shop.getName());
+    }
+
+    private Collection<Employee> getEmployeesFromShop(ResultSet rs, String shopName) throws StorageException, NoArgumentException, PersistenceException {
+        Collection<Employee> employees = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("IDNUM");
+                String ename = rs.getString("NAME");
+                String gender = rs.getString("GENDER");
+                float salary = rs.getFloat("SALARY");
+                String post = rs.getString("POST");
+                employees.add(new Employee(id, ename, gender, salary, post, shopName));
+            }
+        }catch (SQLException e) {
+            throw new StorageException(e);
+        } catch ( NoNameException | NoGenderException | NoPostException | InvalidSalaryException e) {
+            throw new NoArgumentException(e);
+        } catch (Exception e) {
+            throw new PersistenceException(e);
+        }
+        return employees;
     }
 }

@@ -4,6 +4,7 @@ import hu.iit.uni.miskolc.webalk.controller.dto.ShopRequest;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoEmployeeException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoLocationException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
+import hu.iit.uni.miskolc.webalk.core.model.Employee;
 import hu.iit.uni.miskolc.webalk.core.model.Shop;
 import hu.iit.uni.miskolc.webalk.core.service.EmployeeService;
 import hu.iit.uni.miskolc.webalk.core.service.ShopService;
@@ -32,7 +33,7 @@ public class ShopController {
 
     public ShopController(ShopService shopService) throws CreateDataBaseException {
         this.shopService = shopService;
-        if (DataBase.isDBCreated() == false){
+        if (!DataBase.isDBCreated()){
             throw new CreateDataBaseException(DataBase.getCause());
         }
     }
@@ -58,18 +59,16 @@ public class ShopController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void add(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
-        Collection collection = shopRequest.getEmployees();
+        Collection<Employee> collection = shopRequest.getEmployees();
         shopService.createShop(new Shop(shopRequest.getShopName(), shopRequest.getLocation(), collection));
     }
 
     @RequestMapping(value = "/updateshop", method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public boolean update(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, StorageProblemException, ExistingProblemException, PersistenceException, MissingArgumentException, CreateDataBaseException {
-        Collection collection = new ArrayList<>();
-
+    public boolean update(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, StorageProblemException, ExistingProblemException, PersistenceException, MissingArgumentException {
         EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOsql());
-        collection.add(employeeService.getEmployeeByShopName(shopRequest.getShopName()));
+        Collection<Employee> collection = employeeService.getEmployeeByShopName(shopRequest.getShopName());
 
         return shopService.updateShop(new Shop(shopRequest.getShopName(), shopRequest.getLocation(), collection));
     }

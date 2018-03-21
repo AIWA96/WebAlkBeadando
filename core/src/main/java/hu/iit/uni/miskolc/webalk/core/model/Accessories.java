@@ -19,9 +19,9 @@ public class Accessories {
         return appellation;
     }
 
-    public void setAppellation(String appellation) throws NoAppellationException {
-        if (appellation == null || appellation == "") {
-            throw new NoAppellationException("Appelation must be set!");
+    private void setAppellation(String appellation) throws NoAppellationException {
+        if (appellation == null || appellation.equals("")) {
+            throw new NoAppellationException("Appellation must be set!");
         }
         this.appellation = appellation;
     }
@@ -31,8 +31,8 @@ public class Accessories {
     }
 
     public void setBrand(String brand) throws NoNameException {
-        if (brand == null || brand == "") {
-            throw new NoNameException("Accessori must have a brand!");
+        if (brand == null || brand.equals("")) {
+            throw new NoNameException("Accessory must have a brand!");
         }
         this.brand = brand;
     }
@@ -41,7 +41,7 @@ public class Accessories {
         return price;
     }
 
-    public void setPrice(float price) throws InvalidPriceException {
+    private void setPrice(float price) throws InvalidPriceException {
         if (price < 1) {
             throw new InvalidPriceException("The price cannot be negative!");
         }
@@ -55,9 +55,8 @@ public class Accessories {
 
         Accessories that = (Accessories) o;
 
-        if (Float.compare(that.price, price) != 0) return false;
-        if (!appellation.equals(that.appellation)) return false;
-        return brand.equals(that.brand);
+        return Float.compare(that.price, price) == 0 &&
+                appellation.equals(that.appellation) && brand.equals(that.brand);
     }
 
     @Override
