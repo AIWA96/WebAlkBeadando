@@ -20,21 +20,19 @@ public class GlassesDAOsql implements GlassesDAO {
 
     private Connection conn = null;
     private String con;
-    private DataBase db;
 
     public GlassesDAOsql() {
-        db = DataBase.getInstance();
-        con = db.getConnection();
+        con = DataBase.getConnection();
     }
 
     @Override
     public void createGlasses(Glasses glasses) throws AlreadyExistException, StorageException, PersistenceException {
-        String sql = "INSERT INTO Glasses (Brand, Model, Price, AvailableAt, Gender, Sunglasses) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
+            String sql = "INSERT INTO Glasses (Brand, Model, Price, AvailableAt, Gender, Sunglasses) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, glasses.getBrand());
             ps.setString(2, glasses.getModel());
@@ -60,23 +58,23 @@ public class GlassesDAOsql implements GlassesDAO {
                 e.printStackTrace();
             }
             conn = null;
-            sql = null;
         }
     }
 
     @Override
     public Collection<Glasses> getGlasses(String brand) throws StorageException, PersistenceException {
-        String model;
-        float price;
-        String availableAt;
-        String gender;
-        boolean sunglasses;
-        ArrayList<Glasses> glasses = new ArrayList<>();
-        String sql = "SELECT * FROM Glasses WHERE Brand = ?;";
+        Collection<Glasses> glasses = new ArrayList<>();
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
+
+            String model;
+            float price;
+            String availableAt;
+            String gender;
+            boolean sunglasses;
+            String sql = "SELECT * FROM Glasses WHERE Brand = ?;";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, brand);
@@ -102,25 +100,27 @@ public class GlassesDAOsql implements GlassesDAO {
                 e.printStackTrace();
             }
             conn = null;
-            sql = null;
         }
         return glasses;
     }
 
     @Override
     public Glasses getGlasses(String brand, String model) throws StorageException, PersistenceException, NoArgumentException {
-        float price = 0;
-        String availableAt = null;
-        String gender = null;
-        boolean sunglasses = false;
         Glasses glasses;
-        String sql = "SELECT * FROM Glasses WHERE  Brand = \'" + brand + "\' AND " + "Model = \'" + model + "\';";
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
+            float price = 0;
+            String availableAt = null;
+            String gender = null;
+            boolean sunglasses = false;
+            String sql = "SELECT * FROM Glasses WHERE  Brand = ? AND Model = ?;";
+
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, brand);
+            ps.setString(2, model);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 price = rs.getFloat("Price");

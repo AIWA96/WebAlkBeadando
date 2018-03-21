@@ -20,11 +20,9 @@ public class EmployeeDAOsql implements EmployeeDAO {
 
     private Connection conn = null;
     private String con;
-    private DataBase db;
 
     public EmployeeDAOsql() {
-        db = DataBase.getInstance();
-        con = db.getConnection();
+        con = DataBase.getConnection();
     }
 
     @Override
@@ -54,25 +52,29 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
         }
     }
 
     @Override
     public Employee getEmployee(int id) throws StorageException, PersistenceException, NoArgumentException {
-        String ename = null;
-        String gender = null;
-        float salary = 0;
-        String post = null;
-        String shopName = null;
         Employee employee;
 
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
+
+            String ename = null;
+            String gender = null;
+            float salary = 0;
+            String post = null;
+            String shopName = null;
 
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Employee WHERE IDNUM = ?;");
             ps.setInt(1, id);
@@ -94,8 +96,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
         }
         return employee;
@@ -103,19 +108,21 @@ public class EmployeeDAOsql implements EmployeeDAO {
 
     @Override
     public Collection<Employee> getAllEmployee() throws StorageException, PersistenceException, NoArgumentException {
-        int id;
-        String name;
-        String gender;
-        String post;
-        float salary;
-        String shopName;
+
         Collection<Employee> employees = new ArrayList<>();
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
+            int id;
+            String name;
+            String gender;
+            String post;
+            float salary;
+            String shopName;
             String sql = "SELECT * FROM Employee";
+
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -136,8 +143,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
         }
         return employees;
@@ -145,16 +155,17 @@ public class EmployeeDAOsql implements EmployeeDAO {
 
     @Override
     public Collection<Employee> getEmployeeByShopName(String shopName) throws StorageException, NoArgumentException, PersistenceException {
-        int id;
-        String name;
-        String gender;
-        String post;
-        float salary;
         Collection<Employee> employees = new ArrayList<>();
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
+
+            int id;
+            String name;
+            String gender;
+            String post;
+            float salary;
 
             String sql = "SELECT * FROM Employee WHERE ShopName = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -177,8 +188,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
         }
         return employees;
@@ -186,12 +200,12 @@ public class EmployeeDAOsql implements EmployeeDAO {
 
     @Override
     public boolean updateEmployee(Employee employee) throws AlreadyExistException, StorageException, PersistenceException {
-        String sql = "UPDATE Employee SET SALARY = ?, POST = ? WHERE ShopName = ?";
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
+            String sql = "UPDATE Employee SET SALARY = ?, POST = ? WHERE ShopName = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setFloat(1, employee.getSalary());
             ps.setString(2, employee.getPost());
@@ -208,22 +222,24 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
-            sql = null;
         }
         return true;
     }
 
     @Override
     public boolean updateEmployeeWorkPlaceName(String shopName, String oldName) throws AlreadyExistException, StorageException, PersistenceException {
-        String update = "UPDATE Employee SET ShopName = ? WHERE ShopName = ?";
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
+            String update = "UPDATE Employee SET ShopName = ? WHERE ShopName = ?";
             PreparedStatement ps = conn.prepareStatement(update);
             ps.setString(1, shopName);
             ps.setString(2, oldName);
@@ -239,8 +255,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
         }
         return true;
@@ -266,8 +285,11 @@ public class EmployeeDAOsql implements EmployeeDAO {
         } catch (Exception e) {
             throw new PersistenceException(e);
         } finally {
-            try { conn.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             conn = null;
         }
         return true;

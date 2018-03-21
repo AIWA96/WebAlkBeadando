@@ -59,7 +59,7 @@ public final class DataBase {
 
         Connection c = null;
         PreparedStatement ps = null;
-        try (String asd = "asd") {
+        try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection(getConnection());
             c.setAutoCommit(false);
@@ -127,9 +127,6 @@ public final class DataBase {
         } finally {
             try { c.close(); ps.close(); }
             catch (SQLException e) { e.printStackTrace(); }
-            c = null;
-            ps = null;
-            sql = null;
         }
     }
 }
