@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RequestMapping("/shop")
 public class ShopController {
@@ -55,13 +56,13 @@ public class ShopController {
         return shopService.getShopByLocation(location);
     }
 
-    @RequestMapping(value = {"/add"}, method = {RequestMethod.POST},
+    /*@RequestMapping(value = {"/add"}, method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void add(@RequestBody ShopRequest shopRequest) throws NoEmployeeException, NoNameException, NoLocationException, ExistingProblemException, StorageProblemException, MissingArgumentException, PersistenceException {
-        Collection<Employee> collection = shopRequest.getEmployees();
+        Collection<ShopRequest.Employee> collection = shopRequest.getEmployee();
         shopService.createShop(new Shop(shopRequest.getShopName(), shopRequest.getLocation(), collection));
-    }
+    }*/
 
     @RequestMapping(value = "/updateshop", method = {RequestMethod.POST},
             consumes = MediaType.APPLICATION_JSON_VALUE)
