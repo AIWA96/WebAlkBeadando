@@ -3,6 +3,7 @@ package hu.iit.uni.miskolc.webalk.core.model;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoEmployeeException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoLocationException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Collection;
 
@@ -60,6 +61,7 @@ public class Shop {
         return employees;
     }
 
+    @Contract("null -> fail")
     private void setEmployees(Collection<Employee> employees) throws NoEmployeeException {
         if (employees == null || employees.isEmpty()) {
             throw new NoEmployeeException("A shop must contain one employee!");
@@ -67,6 +69,7 @@ public class Shop {
         this.employees = employees;
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

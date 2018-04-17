@@ -1,5 +1,8 @@
 package hu.iit.uni.miskolc.webalk.dao;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,42 +13,29 @@ public final class DataBase {
 
     private static final String con = "jdbc:sqlite:";
     private static final String connection = "./database/glassShop.db";
-    private static DataBase instance = null;
     private static boolean dbCreated = false;
     private static Exception cause = null;
 
     private DataBase() {
-        createDataBase();
     }
 
-    public static DataBase getInstance() {
-        if (instance == null) {
-            synchronized (DataBase.class) {
-                if (instance == null) {
-                    instance = new DataBase();
-                }
-            }
-        }
-        return instance;
-    }
-
-    public static String getPath() {
-        return new File("glassShop.db").getAbsolutePath();
-    }
-
-    public static String getConnection() {
+    @NotNull
+    @Contract(pure = true)
+    static String getConnection() {
         return con + connection;
     }
 
-    public static boolean isDBCreated() {
-        return dbCreated;
+    @Contract(pure = true)
+    public static boolean isDBNotCreated() {
+        return !dbCreated;
     }
 
+    @Contract(pure = true)
     public static Exception getCause() {
         return cause;
     }
 
-    private static void createDataBase() {
+    static void createDataBase() {
         File f = new File(connection);
         if (f.exists() && !f.isDirectory()) {
             dbCreated = true;
@@ -53,9 +43,9 @@ public final class DataBase {
         }
 
         String sql = "CREATE TABLE IF NOT EXISTS `Shop` (\n" +
-                "\t`NAME`\tCHAR ( 50 ) NOT NULL,\n" +
+                "\t`SNAME`\tCHAR ( 50 ) NOT NULL,\n" +
                 "\t`LOCATION`\tCHAR ( 50 ) NOT NULL,\n" +
-                "\tPRIMARY KEY(`NAME`));";
+                "\tPRIMARY KEY(`SNAME`));";
 
         Connection c = null;
         PreparedStatement ps = null;
@@ -94,7 +84,7 @@ public final class DataBase {
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
 
-            sql = "INSERT INTO `Shop` (NAME,LOCATION) VALUES ('Optiris','Tiszaujvaros'),\n" +
+            sql = "INSERT INTO `Shop` (SNAME,LOCATION) VALUES ('Optiris','Tiszaujvaros'),\n" +
                     " ('Trend Optika','Miskolc');";
             ps = c.prepareStatement(sql);
             ps.executeUpdate();
@@ -125,8 +115,12 @@ public final class DataBase {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            try { c.close(); ps.close(); }
-            catch (SQLException e) { e.printStackTrace(); }
+            try {
+                c.close();
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

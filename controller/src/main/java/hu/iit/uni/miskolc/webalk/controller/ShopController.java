@@ -22,9 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @RequestMapping("/shop")
 public class ShopController {
@@ -34,7 +32,7 @@ public class ShopController {
 
     public ShopController(ShopService shopService) throws CreateDataBaseException {
         this.shopService = shopService;
-        if (!DataBase.isDBCreated()){
+        if (DataBase.isDBNotCreated()){
             throw new CreateDataBaseException(DataBase.getCause());
         }
     }

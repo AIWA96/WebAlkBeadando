@@ -3,6 +3,7 @@ package hu.iit.uni.miskolc.webalk.core.model;
 import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoAppellationException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
+import org.jetbrains.annotations.Contract;
 
 public class Accessories {
     private String appellation;
@@ -19,6 +20,7 @@ public class Accessories {
         return appellation;
     }
 
+    @Contract("null -> fail")
     private void setAppellation(String appellation) throws NoAppellationException {
         if (appellation == null || appellation.equals("")) {
             throw new NoAppellationException("Appellation must be set!");
@@ -48,6 +50,7 @@ public class Accessories {
         this.price = price;
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

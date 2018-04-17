@@ -29,7 +29,7 @@ public class EmployeeController {
 
     public EmployeeController(EmployeeService employeeService) throws CreateDataBaseException {
         this.employeeService = employeeService;
-        if (!DataBase.isDBCreated()){
+        if (DataBase.isDBNotCreated()){
             throw new CreateDataBaseException(DataBase.getCause());
         }
     }

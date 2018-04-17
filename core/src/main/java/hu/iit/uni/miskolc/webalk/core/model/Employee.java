@@ -4,6 +4,7 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidSalaryException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoPostException;
+import org.jetbrains.annotations.Contract;
 
 public class Employee {
     private int idNum;
@@ -97,6 +98,7 @@ public class Employee {
         this.shopName = shopName;
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

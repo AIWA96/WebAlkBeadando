@@ -28,7 +28,7 @@ public class AccessoriesController {
 
     public AccessoriesController(AccessoriesService accessoriesService) throws CreateDataBaseException {
         this.accessoriesService = accessoriesService;
-        if (!DataBase.isDBCreated()){
+        if (DataBase.isDBNotCreated()){
             throw new CreateDataBaseException(DataBase.getCause());
         }
     }

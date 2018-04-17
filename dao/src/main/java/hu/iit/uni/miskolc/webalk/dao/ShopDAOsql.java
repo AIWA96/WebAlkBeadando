@@ -32,7 +32,7 @@ public class ShopDAOsql implements ShopDAO {
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
-            String sql = "INSERT INTO Shop (Name, Location) VALUES (?, ?);";
+            String sql = "INSERT INTO Shop (SName, Location) VALUES (?, ?);";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, shop.getName());
             ps.setString(2, shop.getLocation());
@@ -66,7 +66,7 @@ public class ShopDAOsql implements ShopDAO {
             conn.setAutoCommit(false);
 
             String shopLocation;
-            String shopsql = "SELECT * FROM Shop WHERE Name = ?;";
+            String shopsql = "SELECT * FROM Shop WHERE SName = ?;";
             String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
             PreparedStatement ps = conn.prepareStatement(shopsql);
@@ -82,9 +82,9 @@ public class ShopDAOsql implements ShopDAO {
             ps.setString(1, name);
             rs = ps.executeQuery();
 
-            employees= getEmployeesFromShop(rs, name);
+            employees = getEmployeesFromShop(rs, name);
 
-            if (employees.isEmpty()){
+            if (employees.isEmpty()) {
                 throw new NoEmployeeException("No Employee is found in this shop!");
             }
 
@@ -133,9 +133,9 @@ public class ShopDAOsql implements ShopDAO {
                 ps.setString(1, shopName1);
                 rs = ps.executeQuery();
 
-                employees=getEmployeesFromShop(rs, shopName1);
+                employees = getEmployeesFromShop(rs, shopName1);
 
-                if (employees.isEmpty()){
+                if (employees.isEmpty()) {
                     throw new NoEmployeeException("No Employee is found in this shop!");
                 }
 
@@ -174,6 +174,10 @@ public class ShopDAOsql implements ShopDAO {
             String shopsql = "SELECT * FROM Shop;";
             String employeesql = "SELECT * FROM Employee WHERE ShopName = ?;";
 
+//           String innerjoin = "SELECT Shop.LOCATION, Shop.SNAME, Employee.IDNUM, Employee.NAME, " +
+//                    "Employee.GENDER, Employee.POST, Employee.SALARY, Employee.IDNUM From Shop " +
+//                    "Inner Join Employee on Shop.SName = Employee.ShopName;";
+
             PreparedStatement ps = conn.prepareStatement(shopsql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -187,9 +191,9 @@ public class ShopDAOsql implements ShopDAO {
                 ps.setString(1, shopNames.get(i));
                 rs = ps.executeQuery();
 
-                employees=getEmployeesFromShop(rs, shopNames.get(i));
+                employees = getEmployeesFromShop(rs, shopNames.get(i));
 
-                if (employees.isEmpty()){
+                if (employees.isEmpty()) {
                     throw new NoEmployeeException("No Employee is found in this shop!");
                 }
                 shops.add(new Shop(shopNames.get(i), shopLocations.get(i), employees));
@@ -220,7 +224,7 @@ public class ShopDAOsql implements ShopDAO {
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
-            String select = "SELECT NAME FROM Shop WHERE LOCATION = ?";
+            String select = "SELECT SNAME FROM Shop WHERE LOCATION = ?";
             String sql = "UPDATE Shop SET NAME = ? WHERE LOCATION = ?";
             String oldName = null;
 
@@ -269,7 +273,7 @@ public class ShopDAOsql implements ShopDAO {
             conn = DriverManager.getConnection(con);
             conn.setAutoCommit(false);
 
-            String sql = "DELETE FROM Shop WHERE Name = ?";
+            String sql = "DELETE FROM Shop WHERE SName = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, name);
             if (ps.executeUpdate() == 0) {
@@ -308,9 +312,9 @@ public class ShopDAOsql implements ShopDAO {
                 String post = rs.getString("POST");
                 employees.add(new Employee(id, ename, gender, salary, post, shopName));
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new StorageException(e);
-        } catch ( NoNameException | NoGenderException | NoPostException | InvalidSalaryException e) {
+        } catch (NoNameException | NoGenderException | NoPostException | InvalidSalaryException e) {
             throw new NoArgumentException(e);
         } catch (Exception e) {
             throw new PersistenceException(e);

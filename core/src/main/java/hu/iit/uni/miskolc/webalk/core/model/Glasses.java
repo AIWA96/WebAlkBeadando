@@ -4,6 +4,7 @@ import hu.iit.uni.miskolc.webalk.core.exceptions.InvalidPriceException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoGenderException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoLocationSetException;
 import hu.iit.uni.miskolc.webalk.core.exceptions.NoNameException;
+import org.jetbrains.annotations.Contract;
 
 public class Glasses {
     private String brand;
@@ -70,6 +71,7 @@ public class Glasses {
         return availableAt;
     }
 
+    @Contract("null -> fail")
     private void setAvailableAt(String availableAt) throws NoLocationSetException {
         if (availableAt == null || availableAt.equals("")) {
             throw new NoLocationSetException("The shop's location must be set!");
@@ -96,6 +98,7 @@ public class Glasses {
         this.sunglasses = sunglasses;
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -17,7 +17,7 @@ public class AccessoriesDAOsql implements AccessoriesDAO {
     private Connection conn = null;
 
     public AccessoriesDAOsql() {
-        DataBase.getInstance();
+        DataBase.createDataBase();
         con = DataBase.getConnection();
     }
 
